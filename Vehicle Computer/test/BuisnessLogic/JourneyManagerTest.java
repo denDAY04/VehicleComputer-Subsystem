@@ -1,5 +1,8 @@
 package BuisnessLogic;
 
+import java.rmi.RemoteException;
+
+
 
 /**
  * Custom test class for JourneyManager.
@@ -10,7 +13,7 @@ package BuisnessLogic;
 public class JourneyManagerTest {
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws RemoteException {
         // Instansiate test classes with bypassing of RMI registry
         JourneyManagerRMITestImpl rmiImpl = new JourneyManagerRMITestImpl();
         JourneyManager journeyMan = new JourneyManager(rmiImpl);
