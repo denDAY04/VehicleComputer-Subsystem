@@ -13,13 +13,17 @@ import javax.swing.JOptionPane;
  *
  * @author Stensig
  */
-public class GUIAppFrontpage extends javax.swing.JPanel {
+public class GUIFrontpage extends javax.swing.JPanel {
 
+    private final GraphicalUserInterface parent;
+    
     /**
      * Creates new form GUIAppFrontpage
+     * @param parent the parent container for the <code>JLabel</code>.
      */
-    public GUIAppFrontpage() {
+    public GUIFrontpage(GraphicalUserInterface parent) {
         initComponents();
+        this.parent = parent;
     }
 
     /**
@@ -57,8 +61,11 @@ public class GUIAppFrontpage extends javax.swing.JPanel {
             }
         });
 
+        labPDASeen.setForeground(new java.awt.Color(51, 255, 0));
         labPDASeen.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         labPDASeen.setText("Your device has been registered.");
+        labPDASeen.setEnabled(false);
+        labPDASeen.setFocusable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -89,6 +96,8 @@ public class GUIAppFrontpage extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnShowTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowTicketActionPerformed
+        parent.switchPanel("Ticket");
+
         // TODO add your handling code here:
         // UDP to vehicle computer; 
     }//GEN-LAST:event_btnShowTicketActionPerformed

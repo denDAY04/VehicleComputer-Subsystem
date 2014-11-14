@@ -15,7 +15,7 @@ public class PDAApplications extends JApplet{
             javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
                 @Override
                 public void run() {
-                    getContentPane().add(new GUIAppFrontpage());
+                    getContentPane().add(new GraphicalUserInterface());
                 }
             });
         } catch (InterruptedException | InvocationTargetException ex) {
