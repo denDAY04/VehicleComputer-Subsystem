@@ -27,6 +27,15 @@ public class GUIFrontpage extends javax.swing.JPanel {
     }
 
     /**
+     * Show the lable on the front page informing the user that the application
+     * has recieved and responded to a ping. 
+     * @param show true if the lable should be shown, false otherwise. 
+     */
+    public void showPingLable(boolean show) {
+        labPDASeen.setVisible(show);
+    }
+    
+    /**
      * This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -64,7 +73,6 @@ public class GUIFrontpage extends javax.swing.JPanel {
         labPDASeen.setForeground(new java.awt.Color(51, 255, 0));
         labPDASeen.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         labPDASeen.setText("Your device has been registered.");
-        labPDASeen.setEnabled(false);
         labPDASeen.setFocusable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -93,13 +101,12 @@ public class GUIFrontpage extends javax.swing.JPanel {
                 .addComponent(labPDASeen)
                 .addContainerGap())
         );
+
+        this.setVisible(false);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnShowTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowTicketActionPerformed
         parent.switchPanel("Ticket");
-
-        // TODO add your handling code here:
-        // UDP to vehicle computer; 
     }//GEN-LAST:event_btnShowTicketActionPerformed
 
     private void btnRoutePlannerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRoutePlannerActionPerformed

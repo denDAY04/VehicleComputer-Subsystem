@@ -5,6 +5,9 @@
  */
 package FrontEnd;
 
+import BuisnessLogic.Ticket;
+
+
 
 /**
  *
@@ -23,7 +26,7 @@ public class GUITicket extends javax.swing.JPanel {
         this.parent = parent;
     }
 
-    public void loadTicketData() {
+    public void loadTicketData(Ticket ticket) {
         // Load ticket from PDAAplication
     }
     

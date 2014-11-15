@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package FrontEnd;
 
 import java.awt.CardLayout;
@@ -18,14 +13,16 @@ public class GraphicalUserInterface extends javax.swing.JPanel {
     private final CardLayout layout;
     private final GUITicket ticketPanel;
     private final GUIFrontpage frontPagePanel;
+    private final PDAApplication parent;
     
     /**
      * Creates new form GraphicalUserInterface
      */
-    public GraphicalUserInterface() {
+    public GraphicalUserInterface(PDAApplication parent) {
         initComponents();
         layout = new CardLayout();
         this.setLayout(layout);
+        this.parent = parent;
         
         frontPagePanel = new GUIFrontpage(this);
         ticketPanel = new GUITicket(this);
@@ -33,11 +30,24 @@ public class GraphicalUserInterface extends javax.swing.JPanel {
         this.add(ticketPanel, "Ticket");
     }
 
+    /**
+     * Switch to another pane in the <code>GraphicalUserInterface</code>.
+     * @param target the pane to switch to, either "Ticket" or "Front".
+     */
     public void switchPanel(String target) {
         if (target.equals("Ticket")) {
-            ticketPanel.loadTicketData();
+            ticketPanel.loadTicketData(parent.getTicket());
         }        
         layout.show(this, target);
+    }
+    
+    /**
+     * Enable the ping lable on the Front page of the gui, depening on the 
+     * parameter.
+     * @param enable true if lable should be shown, false otherwise. 
+     */
+    public void enablePingLabel(boolean enable) {
+        frontPagePanel.showPingLable(enable);
     }
     
     /**
