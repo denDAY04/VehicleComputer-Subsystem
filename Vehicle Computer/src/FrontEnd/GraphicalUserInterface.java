@@ -1,6 +1,9 @@
 package FrontEnd;
 
+import BuisnessLogic.Ticket;
 import java.awt.CardLayout;
+import java.io.IOException;
+import javax.swing.JOptionPane;
 
 
 
@@ -17,6 +20,7 @@ public class GraphicalUserInterface extends javax.swing.JPanel {
     
     /**
      * Creates new form GraphicalUserInterface
+     * @param parent the application using the gui.
      */
     public GraphicalUserInterface(PDAApplication parent) {
         initComponents();
@@ -36,7 +40,21 @@ public class GraphicalUserInterface extends javax.swing.JPanel {
      */
     public void switchPanel(String target) {
         if (target.equals("Ticket")) {
-            ticketPanel.loadTicketData(parent.getTicket());
+            try {
+                Ticket ticket = parent.getTicket();
+                if (ticket == null) {
+                    String title = "Ticket Error";
+                    String msg = "No ticket was found."
+                            + "\nPlease try again in 10 seconds "
+                            + "\nand if the problem persists"
+                            + "\nsee www.1415.dk";
+                    JOptionPane.showMessageDialog(parent, msg, title, JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                } 
+                ticketPanel.loadTicketData(ticket);
+            } catch (IOException ex) {
+                System.err.println("I/O problems with reading ticket.");
+            }
         }        
         layout.show(this, target);
     }

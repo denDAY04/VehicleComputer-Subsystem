@@ -23,16 +23,53 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="btnBack" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="180" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="fieldTime" max="32767" attributes="0"/>
+                  <Component id="fieldCusNum" alignment="0" max="32767" attributes="0"/>
+                  <Component id="fieldPrice" alignment="0" max="32767" attributes="0"/>
+                  <Component id="fieldStartZone" alignment="0" max="32767" attributes="0"/>
+                  <Component id="fieldTickNum" alignment="0" max="32767" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="btnBack" min="-2" pref="99" max="-2" attributes="0"/>
+                          <Component id="labCusNum" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="labTime" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="labPrice" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="labStartZone" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="labTickNum" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="0" pref="127" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace pref="364" max="32767" attributes="0"/>
-              <Component id="btnBack" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+              <Component id="labCusNum" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="fieldCusNum" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="labTime" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="fieldTime" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="labPrice" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="fieldPrice" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="labStartZone" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="fieldStartZone" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="labTickNum" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="fieldTickNum" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="54" max="32767" attributes="0"/>
+              <Component id="btnBack" min="-2" pref="53" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -41,11 +78,66 @@
   <SubComponents>
     <Component class="javax.swing.JButton" name="btnBack">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Dialog" size="14" style="0"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Back"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBackActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labCusNum">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Customer Number"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="fieldCusNum">
+      <Properties>
+        <Property name="text" type="java.lang.String" value=" "/>
+        <Property name="focusable" type="boolean" value="false"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labTime">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Time"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="fieldTime">
+      <Properties>
+        <Property name="text" type="java.lang.String" value=" "/>
+        <Property name="focusable" type="boolean" value="false"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labPrice">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Price (DKK)"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="fieldPrice">
+      <Properties>
+        <Property name="focusable" type="boolean" value="false"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labStartZone">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Start zone"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="fieldStartZone">
+      <Properties>
+        <Property name="focusable" type="boolean" value="false"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labTickNum">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Ticket Number"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="fieldTickNum">
+      <Properties>
+        <Property name="focusable" type="boolean" value="false"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

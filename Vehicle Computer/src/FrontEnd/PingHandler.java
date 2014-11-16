@@ -32,6 +32,11 @@ class PingHandler extends Thread {
     private final Timer pingTimer;
 
     
+    /**
+     * Constructor for initializing reference to the Application using this
+     * handler. 
+     * @param parent the <code>PDAApplication</code> using the handler.
+     */
     public PingHandler(PDAApplication parent) {
         this.parent = parent;
         pingTimer = new Timer(PINGTIMER_TIMEOUT, new PingTimerListener());
@@ -44,7 +49,7 @@ class PingHandler extends Thread {
         } catch (IOException ex) {
             // If multicast socket fails, application must restart
             System.err.println("Cannot open multicast socket.");
-            parent.applicationError();
+            parent.applicationError(ex);
         }
 
         // Infinite loop to always listen for pings
@@ -53,22 +58,29 @@ class PingHandler extends Thread {
                 // Read packet and verify its payload
                 multiSocket.receive(packetIn);
                 String payload = getData(packetIn);
-                if (payload.isEmpty() || !payload.equals("ping")) {
-                    System.err.println("Ping payload was not recognized. \nDropping ping.");
-                    continue;
-                }
-                missedPings = 0;
                 
-                // Generate reply
-                byte[] reply = generateReplyBuffer();
-                InetAddress replyAddr = packetIn.getAddress();
-                DatagramPacket packetOut = new DatagramPacket(reply, reply.length, replyAddr , SINGLECAST_REPLY_PORT);
-                parent.socket.send(packetOut);
-                
-                // Show in gui that the device has been pinged, and start timer
-                parent.gui.enablePingLabel(true);
-                pingTimer.restart();
-                
+                switch (payload) {
+                    case "ping":
+                        // Set host reply address in parent, for when requesting a ticket
+                        parent.VC_HOST_ADDR = packetIn.getAddress();
+                        // Generate reply
+                        byte[] reply = generateReplyBuffer();
+                        InetAddress replyAddr = packetIn.getAddress();
+                        DatagramPacket packetOut = new DatagramPacket(reply, reply.length, replyAddr , SINGLECAST_REPLY_PORT);
+                        parent.socket.send(packetOut);
+                        break;
+                        
+                    case "ack":
+                        missedPings = 0;
+                        // Show in gui that the device has been pinged, and start timer
+                        parent.gui.enablePingLabel(true);
+                        pingTimer.restart();
+                        break;
+                        
+                    default:
+                        System.err.println("Ping payload not recognized. \nDropping ping.");
+                        break;
+                }              
             } catch (IOException ex) {
                 // Disable gui ping lable and increment lost-ping counter
                 parent.gui.enablePingLabel(false);
@@ -85,7 +97,6 @@ class PingHandler extends Thread {
 
     /**
      * Get the data from the <code>DatagramPacket</code> ping. 
-     * @param packet the ping packet.
      * @return the data from the packet. 
      * @throws IOException if the <code>InputStream</code> 
      */

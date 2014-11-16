@@ -93,7 +93,7 @@
         <Property name="focusable" type="boolean" value="false"/>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="this.setVisible(false);&#xd;&#xa;"/>
+        <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="labPDASeen.setVisible(false);&#xd;&#xa;"/>
       </AuxValues>
     </Component>
   </SubComponents>

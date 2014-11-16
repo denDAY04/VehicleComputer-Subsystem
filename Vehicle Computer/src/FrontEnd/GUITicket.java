@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package FrontEnd;
 
 import BuisnessLogic.Ticket;
@@ -26,8 +21,23 @@ public class GUITicket extends javax.swing.JPanel {
         this.parent = parent;
     }
 
+    /**
+     * Load the data from a <code>Ticket</code> object into the gui panel
+     * displaying the ticket. 
+     * @param ticket the ticket with the information. 
+     */
     public void loadTicketData(Ticket ticket) {
         // Load ticket from PDAAplication
+        String cusNum = "" + ticket.getCustomerNumber();
+        String time = ticket.getTimestamp();
+        String price = "" +  (ticket.getPrice() / 100); // øre to dkk
+        String startZone = "" +  ticket.getStartZone();
+        String tickNum = "" + ticket.getNumber();
+        fieldCusNum.setText(cusNum);
+        fieldTime.setText(time);
+        fieldPrice.setText(price);
+        fieldStartZone.setText(startZone);
+        fieldTickNum.setText(tickNum);
     }
     
     /**
@@ -41,9 +51,20 @@ public class GUITicket extends javax.swing.JPanel {
     private void initComponents() {
 
         btnBack = new javax.swing.JButton();
+        labCusNum = new javax.swing.JLabel();
+        fieldCusNum = new javax.swing.JTextField();
+        labTime = new javax.swing.JLabel();
+        fieldTime = new javax.swing.JTextField();
+        labPrice = new javax.swing.JLabel();
+        fieldPrice = new javax.swing.JTextField();
+        labStartZone = new javax.swing.JLabel();
+        fieldStartZone = new javax.swing.JTextField();
+        labTickNum = new javax.swing.JLabel();
+        fieldTickNum = new javax.swing.JTextField();
 
         setMinimumSize(new java.awt.Dimension(250, 400));
 
+        btnBack.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         btnBack.setText("Back");
         btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -51,20 +72,76 @@ public class GUITicket extends javax.swing.JPanel {
             }
         });
 
+        labCusNum.setText("Customer Number");
+
+        fieldCusNum.setText(" ");
+        fieldCusNum.setFocusable(false);
+
+        labTime.setText("Time");
+
+        fieldTime.setText(" ");
+        fieldTime.setFocusable(false);
+
+        labPrice.setText("Price (DKK)");
+
+        fieldPrice.setFocusable(false);
+
+        labStartZone.setText("Start zone");
+
+        fieldStartZone.setFocusable(false);
+
+        labTickNum.setText("Ticket Number");
+
+        fieldTickNum.setFocusable(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnBack)
-                .addContainerGap(180, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(fieldTime)
+                    .addComponent(fieldCusNum)
+                    .addComponent(fieldPrice)
+                    .addComponent(fieldStartZone)
+                    .addComponent(fieldTickNum)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labCusNum)
+                            .addComponent(labTime)
+                            .addComponent(labPrice)
+                            .addComponent(labStartZone)
+                            .addComponent(labTickNum))
+                        .addGap(0, 127, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(364, Short.MAX_VALUE)
-                .addComponent(btnBack)
+                .addGap(34, 34, 34)
+                .addComponent(labCusNum)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldCusNum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(labTime)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(labPrice)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(labStartZone)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldStartZone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(labTickNum)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldTickNum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -76,5 +153,15 @@ public class GUITicket extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
+    private javax.swing.JTextField fieldCusNum;
+    private javax.swing.JTextField fieldPrice;
+    private javax.swing.JTextField fieldStartZone;
+    private javax.swing.JTextField fieldTickNum;
+    private javax.swing.JTextField fieldTime;
+    private javax.swing.JLabel labCusNum;
+    private javax.swing.JLabel labPrice;
+    private javax.swing.JLabel labStartZone;
+    private javax.swing.JLabel labTickNum;
+    private javax.swing.JLabel labTime;
     // End of variables declaration//GEN-END:variables
 }

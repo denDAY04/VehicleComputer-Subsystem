@@ -102,7 +102,7 @@ public class GUIFrontpage extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        this.setVisible(false);
+        labPDASeen.setVisible(false);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnShowTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowTicketActionPerformed
