@@ -32,7 +32,7 @@ import javax.swing.Timer;
 public class UDPPacketHandler extends Thread {
 
     private final int SEQ_NUM_INDEX = 0;
-    private final int RESEND_TIMEOUT_MS = 4000;     // 4 seconds
+    private final int RESEND_TIMEOUT_MS = (1000 * 4);     // 4 seconds
 
     private boolean alive = true;
     private final int destPort;

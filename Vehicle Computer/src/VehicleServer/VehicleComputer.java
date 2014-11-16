@@ -6,20 +6,32 @@
 package VehicleServer;
 
 import BuisnessLogic.*;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 
 /**
  *
  * @author Stensig
  */
 public class VehicleComputer extends Thread implements ExternalVehicleSignals{
+    
     private int currenZone = 0;
     private PassengerList passengerList = null;
     private TicketList tickets = null;
+    private UDPComHandler udpHandler;
     
     // -- store ticketlist in local file for backup?
+    
+    public VehicleComputer(String trafficManPort, String trafficManAddr) {
+        try {
+            udpHandler = new UDPComHandler(trafficManPort, trafficManAddr);
+        } catch (NumberFormatException | UnknownHostException |
+                SocketException ex) {
+            System.err.println("Fatal error in VehicleComputer setup.");
+            ex.printStackTrace();
+            System.exit(-1);
+        }
+    }
     
     @Override
     public void run() {
@@ -34,29 +46,11 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
     @Override
     public void zoneTransit(int zoneEntered) {
         // calculate new price for each ticket in list 
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    
-    class pingTimer extends Thread {
-        ArrayList<String>[] pingSeq;
-        int PING_INTERVAL = 3000;        // in milliseconds
-        
-        @Override
-        public void run() {
-            for (int i = 0; i < 3; ++i) {
-                pingSeq[i] = udpTran.getPassangerDeviceNumbers();
-                try {
-                    wait(PING_INTERVAL);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(VehicleComputer.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-    }
     
     public static void main(String[] args) {
-        VehicleComputer vc = new VehicleComputer();
+        VehicleComputer vc = new VehicleComputer(args[0], args[1]);
         vc.start();
     }
 }
