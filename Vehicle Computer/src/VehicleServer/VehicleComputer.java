@@ -16,7 +16,6 @@ import java.util.logging.Logger;
  */
 public class VehicleComputer extends Thread implements ExternalVehicleSignals{
     private int currenZone = 0;
-    private UDPMulticastTranciever udpTran = new UDPMulticastTranciever();
     private PassengerList passengerList = null;
     private TicketList tickets = null;
     
@@ -24,7 +23,7 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
     
     @Override
     public void run() {
-        udpTran.start();
+
     }
     
     @Override

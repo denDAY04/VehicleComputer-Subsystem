@@ -22,9 +22,10 @@ import javax.swing.Timer;
  */
 class PingHandler extends Thread {
         
-    private final int MULTICAST_PORT = 24448;
-    private final int SINGLECAST_REPLY_PORT = 24449;
     private final int PINGTIMER_TIMEOUT = (1000 * 60 * 10); // 10 minutes
+    
+    private final int multicastPort = 24448;
+    private final int singlecastReplyPort = 24449;
     private MulticastSocket multiSocket;
     private int missedPings;
     private final DatagramPacket packetIn = new DatagramPacket(new byte[128], 128);
@@ -45,7 +46,7 @@ class PingHandler extends Thread {
     @Override
     public void run() {
         try {
-            multiSocket = new MulticastSocket(MULTICAST_PORT);
+            multiSocket = new MulticastSocket(multicastPort);
         } catch (IOException ex) {
             // If multicast socket fails, application must restart
             System.err.println("Cannot open multicast socket.");
@@ -62,11 +63,11 @@ class PingHandler extends Thread {
                 switch (payload) {
                     case "ping":
                         // Set host reply address in parent, for when requesting a ticket
-                        parent.VC_HOST_ADDR = packetIn.getAddress();
+                        parent.VCHostAddr = packetIn.getAddress();
                         // Generate reply
                         byte[] reply = generateReplyBuffer();
                         InetAddress replyAddr = packetIn.getAddress();
-                        DatagramPacket packetOut = new DatagramPacket(reply, reply.length, replyAddr , SINGLECAST_REPLY_PORT);
+                        DatagramPacket packetOut = new DatagramPacket(reply, reply.length, replyAddr , singlecastReplyPort);
                         parent.socket.send(packetOut);
                         break;
                         

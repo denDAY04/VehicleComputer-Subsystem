@@ -28,11 +28,6 @@ import java.rmi.RemoteException;
  */
 public class UDPTrafficManager {
 
-    private DatagramSocket socket;
-    private String rmiHost, rmiJournayManagerName;
-    private int rmiPort;
-    private int udpSocketPort = 2409;
-
     /**
      * Size for a <code>byte</code> buffer tested to hold 800 passengers in a
      * serialized <code>PassengerList</code>. Test showed a size of 8207 bytes.
@@ -47,6 +42,10 @@ public class UDPTrafficManager {
      */
     protected static final int BUFFER_OUT_SIZE = 21900;
 
+    private DatagramSocket socket;
+    private String rmiHost, rmiJournayManagerName;
+    private int rmiPort;
+    private int udpSocketPort = 2409;
 
     /**
      * Open the UDP <code>DatagramSocket</code> on a specified port, with the

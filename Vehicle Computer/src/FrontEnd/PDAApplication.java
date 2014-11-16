@@ -25,20 +25,19 @@ public class PDAApplication extends JApplet {
      * Port number for the a handler listening for ping replies, which is always 
      * the same across all vehicles. 
      */
-    private final int VC_UNICAST_PORT = 2223;
+    private final int VCUnicastPort = 2223;
     /**
      * Do not tax the unicast handler on the <code>VehicleComputer</code> with 
      * requests for tickets. 
      */
-    private final int VC_TICKET_REQUEST_PORT = 2225;
+    private final int VCTicketRequestPort = 2225;
     /**
      * Host name for <code>VehicleComputer</code> is set when the application is 
      * pinged. It cannot know the address of the vehicle it is currently on until 
      * it has recieved a ping from it. 
      */
-    protected InetAddress VC_HOST_ADDR;
-    private final int APPLICATION_PORT = 2224;
-    
+    protected InetAddress VCHostAddr;
+    private final int localPort = 2224;
     protected DatagramSocket socket;
     protected String customerNumber;
     protected GraphicalUserInterface gui;
@@ -50,7 +49,7 @@ public class PDAApplication extends JApplet {
         // Read customer number from file, open multicast socket, and run GUI
         try {
             fetchCustomerNumber();
-            socket = new DatagramSocket(APPLICATION_PORT);
+            socket = new DatagramSocket(localPort);
             gui = new GraphicalUserInterface(this);
             
             javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
@@ -116,7 +115,7 @@ public class PDAApplication extends JApplet {
      */
     public Ticket getTicket() throws IOException {
         // If no ping has been recived yet the application will not know the out-address
-        if (VC_HOST_ADDR == null) {
+        if (VCHostAddr == null) {
             return null;
         }
 
@@ -125,7 +124,7 @@ public class PDAApplication extends JApplet {
         ObjectOutputStream oos = new ObjectOutputStream(bos);
         oos.writeObject(customerNumber);
         byte[] buffOur = bos.toByteArray();
-        DatagramPacket packetOut = new DatagramPacket(buffOur, buffOur.length, VC_HOST_ADDR, VC_TICKET_REQUEST_PORT);
+        DatagramPacket packetOut = new DatagramPacket(buffOur, buffOur.length, VCHostAddr, VCTicketRequestPort);
         socket.send(packetOut);
         
         // Get reply and check for valid ticket

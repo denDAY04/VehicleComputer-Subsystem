@@ -273,7 +273,7 @@ public class UDPPacketHandler extends Thread {
             }
             try {
                 // Retry
-                socket.send(packetIn);
+                socket.send(packetOut);
             } catch (IOException ex1) {
                 System.err.println("I/O exeption #2 in sending reply. ");
                 System.err.println("Dropping reply.");
