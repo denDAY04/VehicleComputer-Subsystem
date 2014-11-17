@@ -22,6 +22,14 @@ public class TicketList implements Serializable {
     public TicketList() {
         tickets = new ArrayList<>();
     }
+    
+    /**
+     * Copy constructor.
+     * @param other the original object to copy.
+     */
+    public TicketList(TicketList other) {
+        tickets = other.tickets;
+    }
 
     /**
      * Set all tickets in the list. Note that this overrides existing tickets.

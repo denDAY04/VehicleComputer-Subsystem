@@ -17,20 +17,17 @@ public class PassengerList implements Serializable {
 
     // Passengers onboard a vehicle, represented through their customer number.
     private ArrayList<Integer> passengers;
-
-    /*
-     Flag for indicating whether a new zone has been entered with the passengers.
-     This is needed to evaluate ticket prices in the database system. 
-     */
-    private boolean newZone;
+    // The zone that the passengers of the list are in 
+    private int zone;
 
 
     /**
-     * Default constructor.
+     * Constructor.
+     * @param zone the zone number of the zone the passengers are in. 
      */
-    public PassengerList() {
+    public PassengerList(int zone) {
         passengers = new ArrayList<>();
-        newZone = false;
+        this.zone = zone;
     }
 
     /**
@@ -61,23 +58,19 @@ public class PassengerList implements Serializable {
     }
 
     /**
-     * See if the passengers have entered a new zone. The internal flag (and
-     * thus the return value of this method) is defaulted to FALSE. 
-     * Use setIsInNewZone() to change the flag to TRUE.
-     * <p>
-     * @return true if the passengers have entered a new zone; false otherwise.
+     * Get the zone number of the passenger list. 
+     * @return the zone number
      */
-    public boolean getIsInNewZone() {
-        return newZone;
+    public int getZone() {
+        return zone;
     }
-
+    
     /**
-     * Manipulate the passenger list to indicate that they are in a new zone.
-     * This method sets the internal flag to TRUE, indicating that a new zone
-     * has been entered. By default, the flag is false.
+     * Set the zone number.
+     * @param zone the new zone number.
      */
-    public void setIsInNewZone() {
-        newZone = true;
+    public void setZone(int zone) {
+        this.zone = zone;
     }
 
     /**
@@ -141,7 +134,7 @@ public class PassengerList implements Serializable {
             throw new IllegalArgumentException("Supplied argument was NULL.");
         }
 
-        PassengerList duplicates = new PassengerList();
+        PassengerList duplicates = new PassengerList(zone);
         ArrayList<Integer> otherPassengers = other.getAllPassengers();
 
         for (Integer pass : passengers) {

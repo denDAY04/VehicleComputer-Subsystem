@@ -3,6 +3,7 @@ package FrontEnd;
 import BuisnessLogic.Ticket;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -34,7 +35,7 @@ public class PDAApplication extends JApplet {
     /**
      * Host name for <code>VehicleComputer</code> is set when the application is 
      * pinged. It cannot know the address of the vehicle it is currently on until 
-     * it has recieved a ping from it. 
+     * it has received a ping from it. 
      */
     protected InetAddress VCHostAddr;
     private final int localPort = 2224;
@@ -48,7 +49,7 @@ public class PDAApplication extends JApplet {
     public void init() {
         // Read customer number from file, open multicast socket, and run GUI
         try {
-            fetchCustomerNumber();
+            readCustomerNumber();
             socket = new DatagramSocket(localPort);
             gui = new GraphicalUserInterface(this);
             
@@ -76,16 +77,36 @@ public class PDAApplication extends JApplet {
     
     /**
      * Reads the customer number from a properties file in the directory of the 
-     * application. 
+     * application, if such exists. Otherwise, the user is prompted for an input
+     * which is stored in the file.
      * @throws FileNotFoundException if the properties file does not exist.
      * @throws IOException if there were problems reading the properties file. 
      */
-    private void fetchCustomerNumber() throws FileNotFoundException, IOException {
-        //File file = new File("cu_prop.txt");
-        String file = "cu_prop.txt";
-        RandomAccessFile raf = new RandomAccessFile(file, "r");    
-        customerNumber = raf.readLine();
-        raf.close();
+    private void readCustomerNumber() throws FileNotFoundException, IOException {
+        String name = "cu_prop.txt";
+        File file = new File(name);
+        
+        if (file.exists()) {
+            RandomAccessFile raf = new RandomAccessFile(file, "r");    
+            customerNumber = raf.readLine();
+            raf.close();
+        } else {
+            // Get customer number from user
+            String input = "";
+            while (!input.matches("[0-9]+")) {    // must only be digits
+                input = JOptionPane.showInputDialog(this, "Please supply your customer number:");
+                if (input == null) {
+                    System.err.println("User canceled action. \nClosing app.");
+                    System.exit(-1);
+                }
+            }
+            // Store and write to file
+            customerNumber = input;
+            RandomAccessFile raf = new RandomAccessFile(file, "rw");
+            for (byte b : customerNumber.getBytes()) {
+                raf.writeByte(b);
+            }
+        }
     }
     
     /**

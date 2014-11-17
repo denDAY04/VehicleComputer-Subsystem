@@ -11,16 +11,16 @@ import java.rmi.RemoteException;
 
 
 /**
- * Manager for incoming serivce requests from <code>VehicleComputer</code>
- * clients. This class captures the UDP request and instanciates a new instance
+ * Manager for incoming service requests from <code>VehicleComputer</code>
+ * clients. This class captures the UDP request and instantiates a new instance
  * of of the <code>UDPPacketHandler</code> class. This class is then passed
- * the request for service and will service the client in a seperate thread.
+ * the request for service and will service the client in a separate thread.
  * <p>
- * NOTE that this class does not check the incoming UDP datagrams for propper
+ * NOTE that this class does not check the incoming UDP datagrams for proper
  * request syntax as dictated by a custom protocol. Instead, this is left for
  * the designated handler of the request.
  * <p>
- * Furthermore, this class cotains the main method for starting this part of the
+ * Furthermore, this class contains the main method for starting this part of the
  * business logic back-end.
  * <p>
  * @author Andreas Stensig Jensen, on Nov 7, 2014
