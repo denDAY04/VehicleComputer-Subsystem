@@ -52,6 +52,15 @@ public class UDPUplinkHandler {
         timer = new Timer(TIMEOUT_DELAY, new TimeoutListener());
     }
     
+    /**
+     * Get tickets for the supplied passengers. This method communicates through
+     * UDP to the <code>UDPTrafficManager</code> and 
+     * <code>UDPPacketHandler</code>.
+     * @param passengers list of passengers to get the tickets for. 
+     * @return a <code>TicketList</code> with all the tickets, or NULL if an 
+     * error occoured. 
+     * @throws IOException if an I/O error occoured in the Streams.
+     */
     public TicketList getTicketList(PassengerList passengers) throws IOException {
         // Serialize passenger list and send the request to TrafficManager
         ByteArrayOutputStream bos = new ByteArrayOutputStream();

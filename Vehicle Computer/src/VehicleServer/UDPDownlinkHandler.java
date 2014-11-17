@@ -2,10 +2,13 @@ package VehicleServer;
 
 import BuisnessLogic.Ticket;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.SocketException;
 
 
@@ -42,8 +45,15 @@ public class UDPDownlinkHandler extends Thread {
                 int cusNum = Integer.parseInt(customerNum);
                 Ticket ticket = findTicket(cusNum);
                 
-                // Create reply
-                
+                // Create reply and send it
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                ObjectOutputStream oos = new ObjectOutputStream(bos);
+                oos.writeObject(ticket);
+                byte[] bufferOut = bos.toByteArray();
+                InetAddress replyAddr = packetIn.getAddress();
+                int replyPort = packetIn.getPort();
+                DatagramPacket packetOut = new DatagramPacket(bufferOut, bufferOut.length, replyAddr,replyPort);
+                socket.send(packetOut);
             } catch (IOException ex) {
                 System.err.println("IO exception; could not recieve datagram."
                         + "\nDatagram dropped.");

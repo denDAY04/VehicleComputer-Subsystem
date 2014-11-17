@@ -29,12 +29,14 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
     private PassengerList passengers = null;
     private TicketList tickets = null;
     private UDPUplinkHandler uplinkHandler;
+    private UDPDownlinkHandler downlinkHandler;
     
     
     public VehicleComputer(String startZone, String uplinkPort, String trafficManPort, String trafficManAddr) {
         try {
             currenZone = Integer.parseInt(startZone);
             uplinkHandler = new UDPUplinkHandler(uplinkPort, trafficManPort, trafficManAddr);
+            downlinkHandler = new UDPDownlinkHandler(this);
         } catch (NumberFormatException | UnknownHostException |
                 SocketException ex) {
             System.err.println("Fatal error in VehicleComputer setup.");
@@ -50,7 +52,7 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
     
     @Override
     public void leftStation() {
-        
+        //ping
     }    
 
     @Override
