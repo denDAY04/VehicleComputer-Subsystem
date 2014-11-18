@@ -40,7 +40,7 @@ public class PassengerListTest {
      */
     @Before
     public void setUp() {
-        instance = new PassengerList();
+        instance = new PassengerList(5);
         instance.addSinglePassenger(1);
         instance.addSinglePassenger(2);
         instance.addSinglePassenger(3);
@@ -75,8 +75,8 @@ public class PassengerListTest {
     @Test
     public void testGetDuplicatePassengers() {
         System.out.println("getDuplicatePassengers");
-        PassengerList other = new PassengerList();
-        PassengerList expResult = new PassengerList();
+        PassengerList other = new PassengerList(5);
+        PassengerList expResult = new PassengerList(5);
 
         // Add test data to lists
         ArrayList<Integer> listOther = new ArrayList<>();
@@ -160,7 +160,7 @@ public class PassengerListTest {
     @Test
     public void testEquals() {
         System.out.println("equals");
-        PassengerList passengers = new PassengerList();
+        PassengerList passengers = new PassengerList(5);
         passengers.addSinglePassenger(4);
         passengers.addSinglePassenger(2);
         passengers.addSinglePassenger(1);
@@ -221,29 +221,6 @@ public class PassengerListTest {
         System.out.println("isEmpty");
         boolean expResult = false;
         boolean result = instance.isEmpty();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of getIsInNewZone method, of class PassengerList.
-     */
-    @Test
-    public void testGetIsInNewZone() {
-        System.out.println("getIsInNewZone");
-        boolean expResult = false;
-        boolean result = instance.getIsInNewZone();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of setIsInNewZone method, of class PassengerList.
-     */
-    @Test
-    public void testSetIsInNewZone() {
-        System.out.println("setIsInNewZone");
-        instance.setIsInNewZone();
-        boolean expResult = true;
-        boolean result = instance.getIsInNewZone();
         assertEquals(expResult, result);
     }
 

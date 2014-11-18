@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package VehicleServer;
 
 /**
@@ -10,6 +5,7 @@ package VehicleServer;
  * @author Stensig
  */
 public interface ExternalVehicleSignals {
+    
     /**
     * Expected to be triggered a few seconds after leaving a station.
     */

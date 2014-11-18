@@ -36,7 +36,7 @@ public class IntegrationTest extends Thread {
      * @return a list of passengers with customer numbers 3, 4, and 6.
      */
     public static PassengerList generatePassList() {
-        PassengerList passengers = new PassengerList();
+        PassengerList passengers = new PassengerList(5);
         int[] customerNumbers = {3, 4, 6};
         for (int i : customerNumbers) {
             passengers.addSinglePassenger(i);

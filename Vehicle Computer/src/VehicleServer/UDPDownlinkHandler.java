@@ -13,7 +13,9 @@ import java.net.SocketException;
 
 
 /**
- * {Insert class description here}
+ * Servicing thread class for <code>PDAApplication</code> objects that requests
+ * their ticket from the <code>VehicleComputer</code> <code>TicketList</code>
+ * field.
  * 
  * @author Andreas Stensig Jensen, on Nov 17, 2014
  * Contributors: 
@@ -25,11 +27,21 @@ public class UDPDownlinkHandler extends Thread {
     private final VehicleComputer parent;
     
     
-    public UDPDownlinkHandler(VehicleComputer parent) throws NumberFormatException, SocketException {
+    /**
+     * Constructor.
+     * @param parent the <code>VehicleComputer</code> that owns this object. 
+     * @throws SocketException if the UDP socket could not be opened.
+     */
+    public UDPDownlinkHandler(VehicleComputer parent) throws SocketException {
         socket = new DatagramSocket(localPort);
         this.parent = parent;
     }
     
+    /**
+     * Always listen for new <code>DatagramPackets</code>. Service them by 
+     * getting the requested ticket from the <code>parent</code>, if there 
+     * are any. 
+     */
     @Override
     public void run() {
         DatagramPacket packetIn = new DatagramPacket(new byte[256], 256);
@@ -46,10 +58,18 @@ public class UDPDownlinkHandler extends Thread {
                 Ticket ticket = findTicket(cusNum);
                 
                 // Create reply and send it
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                ObjectOutputStream oos = new ObjectOutputStream(bos);
-                oos.writeObject(ticket);
-                byte[] bufferOut = bos.toByteArray();
+                byte[] bufferOut;
+                if (ticket != null) {
+                    // Serialize ticket
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    ObjectOutputStream oos = new ObjectOutputStream(bos);
+                    oos.writeObject(ticket);
+                    bufferOut = bos.toByteArray();
+                } else {
+                    // Send datagram with only 1, empty byte 
+                    bufferOut = new byte[1];
+                }
+                // Send reply
                 InetAddress replyAddr = packetIn.getAddress();
                 int replyPort = packetIn.getPort();
                 DatagramPacket packetOut = new DatagramPacket(bufferOut, bufferOut.length, replyAddr,replyPort);

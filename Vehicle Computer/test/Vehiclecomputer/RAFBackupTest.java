@@ -1,5 +1,7 @@
 package Vehiclecomputer;
 
+import BuisnessLogic.PassengerList;
+import BuisnessLogic.TicketList;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -21,8 +23,10 @@ public class RAFBackupTest {
             
 //            String data1 = "Test# ";
 //            int data2 = 1;
-            String data1 = null;
-            Integer data2 = null;
+//            String data1 = null;
+//            Integer data2 = null;
+            PassengerList data1 = new PassengerList(20);
+            TicketList data2 = new TicketList();
                     
             ObjectOutputStream oos = new ObjectOutputStream(bos);
             oos.writeObject(data1);
@@ -41,10 +45,10 @@ public class RAFBackupTest {
             ByteArrayInputStream bis = new ByteArrayInputStream(buff);
             ObjectInputStream ois = new ObjectInputStream(bis);
             
-            String res1 = (String) ois.readObject();
-            int res2 = (Integer) ois.readObject();
+            PassengerList res1 = (PassengerList) ois.readObject();
+            TicketList res2 = (TicketList) ois.readObject();
             
-            System.out.println(res1 + res2);
+            System.out.println(res1.toString() + res2.toString());
             
     }
 }

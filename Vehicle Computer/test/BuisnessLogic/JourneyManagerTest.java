@@ -19,7 +19,7 @@ public class JourneyManagerTest {
         JourneyManager journeyMan = new JourneyManager(rmiImpl);
         // Test-passenger list
         int[] customerNumbers = {3, 4, 6};
-        PassengerList passengers = new PassengerList();
+        PassengerList passengers = new PassengerList(5);
         passengers.addSinglePassenger(customerNumbers[0]);
         passengers.addSinglePassenger(customerNumbers[1]);
         passengers.addSinglePassenger(customerNumbers[2]);

@@ -26,15 +26,28 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
     private final String BACKUP_FILE_NAME = "vc_backup.txt";
     
     private int currenZone = 1;
-    private PassengerList passengers = null;
-    private TicketList tickets = null;
+    private PassengerList passengers;
+    private TicketList tickets;
     private UDPUplinkHandler uplinkHandler;
     private UDPDownlinkHandler downlinkHandler;
     
     
+    /**
+     * Constructor. Will try and read passenger and tickets from a local 
+     * "vc_backup.txt" file, if such exists. 
+     * @param startZone the zone in which the vehicle is placed at the time of 
+     * program startup. 
+     * @param uplinkPort the port number for the Uplink handler to the business
+     * logic backend.
+     * @param trafficManPort the port number for the 
+     * <code>UDPTrafficManager</code> to which this system must communicate. 
+     * @param trafficManAddr the host name address for the 
+     * <code>UDPTrafficManager</code> to which this system must communicate. 
+     */
     public VehicleComputer(String startZone, String uplinkPort, String trafficManPort, String trafficManAddr) {
         try {
             currenZone = Integer.parseInt(startZone);
+            readBackup();       // Load in passengers and tickets if there is a backup
             uplinkHandler = new UDPUplinkHandler(uplinkPort, trafficManPort, trafficManAddr);
             downlinkHandler = new UDPDownlinkHandler(this);
         } catch (NumberFormatException | UnknownHostException |
@@ -47,18 +60,33 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
     
     @Override
     public void run() {
-
+        while (true) {
+            // TODO: ?
+            // Thread extension nesseccary? 
+        }
     }
     
+    /**
+     * Interface method implementation to an external signal (or simulation)
+     * indicating that the vehicle has left the station/stop. This initiate 
+     * pinging of <code>PDAApplication</code> clients in the vicinity of the 
+     * system.
+     */
     @Override
     public void leftStation() {
         //ping
     }    
 
+    /**
+     * Interface method implementation to an external signal (or simulation) 
+     * indicating that the vehicle has transitioned from one zone into another. 
+     * @param zoneEntered the zone number of the newly entered zone.
+     */
     @Override
     public void zoneTransit(int zoneEntered) {
         currenZone = zoneEntered;
         passengers.setZone(currenZone);
+        // Update for possible new tickets
         tickets = requestTickets();
     }
     
@@ -70,11 +98,18 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
         return new TicketList(tickets);
     }
     
+    /**
+     * Request tickets through the <code>UDPUplinkHandler</code>. Should the 
+     * result be unsuccessful in getting getting a <code>TicketList</code> the
+     * method will retry up to five times before commencing a system-reboot 
+     * request; being unable to get tickets for its passengers is a fatal error. 
+     * @return the tickets for the <code>Passengerlist</code> field. 
+     */
     private TicketList requestTickets() {
         TicketList newTickets = null;
         try {   
-            // Try three times
-            for (int i = 0; i != 3 && newTickets == null; ++i) {
+            // Try five times
+            for (int i = 0; i != 5 && newTickets == null; ++i) {
                 newTickets = uplinkHandler.getTicketList(passengers);
             }
         } catch (IOException ex) {
@@ -158,6 +193,7 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
         
         return true;
     }
+    
     
     public static void main(String[] args) {
         VehicleComputer vc = new VehicleComputer(args[0], args[1], args[2], args[3]);

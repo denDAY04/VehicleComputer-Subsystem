@@ -58,8 +58,8 @@ public class UDPUplinkHandler {
      * <code>UDPPacketHandler</code>.
      * @param passengers list of passengers to get the tickets for. 
      * @return a <code>TicketList</code> with all the tickets, or NULL if an 
-     * error occoured. 
-     * @throws IOException if an I/O error occoured in the Streams.
+     * error occurred. 
+     * @throws IOException if an I/O error occurred in the Streams.
      */
     public TicketList getTicketList(PassengerList passengers) throws IOException {
         // Serialize passenger list and send the request to TrafficManager
@@ -122,7 +122,7 @@ public class UDPUplinkHandler {
      * storing the sequence number in the currSeqNum field, and return an
      * <code>ObjectInputStream</code> with the data payload. 
      * <p>
-     * @param packet the datagram that has been recieved and from which 
+     * @param packet the datagram that has been received and from which 
      * data should be extracted.
      * @return the data payload in an <code>ObjectInputStream</code>.
      */
@@ -158,7 +158,7 @@ public class UDPUplinkHandler {
         } catch (IOException ex) {
             System.err.println("I/O exception in sending reply. ");
             try {
-                this.wait(10);
+                Thread.sleep(10);
             } catch (InterruptedException ex1) {
                 // Do nothing
             }

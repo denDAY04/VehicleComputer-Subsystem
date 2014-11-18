@@ -137,6 +137,7 @@ public class PDAApplication extends JApplet {
     public Ticket getTicket() throws IOException {
         // If no ping has been recived yet the application will not know the out-address
         if (VCHostAddr == null) {
+            System.err.println("No ping as been recieved yet. Cannot request ticket.");
             return null;
         }
 
@@ -152,16 +153,19 @@ public class PDAApplication extends JApplet {
         int arr_len = 150;      // Test gave serialized Ticket as 137 bytes
         DatagramPacket packetIn = new DatagramPacket(new byte[arr_len], arr_len);
         socket.receive(packetIn);
-        
-        ByteArrayInputStream bis = new ByteArrayInputStream(packetIn.getData());
-        ObjectInputStream ois = new ObjectInputStream(bis);
         Ticket ticket = null;
-        try {
-            ticket = (Ticket) ois.readObject();
-        } catch (ClassNotFoundException ex) {
-            System.err.println("Application not read Ticket from Inputstream. ");
-        }
+        byte[] dataBuff = packetIn.getData();
         
+        // Only deserialize if a ticket was returned
+        if (dataBuff.length > 1) {
+            ByteArrayInputStream bis = new ByteArrayInputStream(dataBuff);
+            ObjectInputStream ois = new ObjectInputStream(bis);
+            try {
+                ticket = (Ticket) ois.readObject();
+            } catch (ClassNotFoundException ex) {
+                System.err.println("Application not read Ticket from Inputstream. ");
+            }
+        }
         return ticket;
     }
     

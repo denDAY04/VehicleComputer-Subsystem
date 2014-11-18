@@ -267,7 +267,7 @@ public class UDPPacketHandler extends Thread {
         } catch (IOException ex) {
             System.err.println("I/O exception in sending reply. ");
             try {
-                this.wait(10);
+                Thread.sleep(10);
             } catch (InterruptedException ex1) {
                 // Do nothing
             }

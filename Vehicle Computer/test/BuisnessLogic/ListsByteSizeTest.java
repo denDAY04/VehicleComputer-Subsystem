@@ -18,7 +18,7 @@ public class ListsByteSizeTest {
     
     
     public static void main(String[] args) throws IOException {
-        PassengerList passList = new PassengerList();
+        PassengerList passList = new PassengerList(5);
         TicketList tickList = new TicketList();
         ArrayList<Integer> passengers = new ArrayList<>();
         ArrayList<Ticket> tickets = new ArrayList<>();
