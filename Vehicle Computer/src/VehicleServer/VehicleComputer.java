@@ -14,8 +14,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.RandomAccessFile;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -24,12 +31,18 @@ import java.net.UnknownHostException;
 public class VehicleComputer extends Thread implements ExternalVehicleSignals{
     
     private final String BACKUP_FILE_NAME = "vc_backup.txt";
+    private final int QUEUE_SIZE = 20;
+    private final int CORE_POOL_SIZE = 10;
+    private final int MAX_POOL_SIZE = 20;
+    private final int EXCESS_POOL_TIMEOUT = 30;         // in seconds
     
     private int currenZone = 1;
+    private final int pongPort = 2223;
     private PassengerList passengers;
     private TicketList tickets;
     private UDPUplinkHandler uplinkHandler;
     private UDPDownlinkHandler downlinkHandler;
+    private UDPPingSender pingSender;
     
     
     /**
@@ -50,6 +63,7 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
             readBackup();       // Load in passengers and tickets if there is a backup
             uplinkHandler = new UDPUplinkHandler(uplinkPort, trafficManPort, trafficManAddr);
             downlinkHandler = new UDPDownlinkHandler(this);
+            pingSender = new UDPPingSender(this);
         } catch (NumberFormatException | UnknownHostException |
                 SocketException ex) {
             System.err.println("Fatal error in VehicleComputer setup.");
@@ -60,9 +74,29 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
     
     @Override
     public void run() {
+        BlockingQueue<Runnable> blockQueue = new ArrayBlockingQueue<>(QUEUE_SIZE);
+        ThreadPoolExecutor executor = 
+                new ThreadPoolExecutor(CORE_POOL_SIZE, MAX_POOL_SIZE, EXCESS_POOL_TIMEOUT, 
+                        TimeUnit.SECONDS, blockQueue);
+        executor.setRejectedExecutionHandler(new RejectPongExecuteHandler());
+        DatagramSocket pongSocket = null;
+        try {
+            pongSocket = new DatagramSocket(pongPort);
+        } catch (SocketException ex) {
+            System.err.println("Could not open pong socket. Restart required.");
+            ex.printStackTrace();
+            System.exit(-1);
+        }
+        executor.prestartAllCoreThreads();
         while (true) {
-            // TODO: ?
-            // Thread extension nesseccary? 
+            // Need more work?
+            DatagramPacket packetIn = new DatagramPacket(new byte[64], 64);
+            try {
+                pongSocket.receive(packetIn);
+                executor.execute(new UDPPongHandler(this, packetIn));
+            } catch (IOException ex) {
+                System.err.println("Could not receive pong packet; dropping.");
+            }
         }
     }
     
@@ -74,7 +108,7 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
      */
     @Override
     public void leftStation() {
-        //ping
+        pingSender.start();
     }    
 
     /**
@@ -136,7 +170,7 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
      * output of the stack trace of the cause of the fatal error. 
      * @param cause the exception that caused the fatal error.
      */
-    private void systemRestartWarning(Exception cause) {
+    public void systemRestartWarning(Exception cause) {
         try {
             // Serialize passengers and tickets
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -194,9 +228,34 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
         return true;
     }
     
+    /**
+     * Add a customer/passenger to the list of passengers. 
+     * @param CustomerNumber customer number of the passenger. 
+     */
+    public synchronized void addToPassengers(int CustomerNumber) {
+        passengers.addSinglePassenger(CustomerNumber);
+    }
+    
     
     public static void main(String[] args) {
         VehicleComputer vc = new VehicleComputer(args[0], args[1], args[2], args[3]);
         vc.start();
+    }
+    
+    class RejectPongExecuteHandler implements RejectedExecutionHandler {
+
+        @Override
+        public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
+            System.err.println("Rejected from queue. 10 ms sleep");
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException ex) {
+                System.err.println("Sleep interrupted");
+                ex.printStackTrace();
+            }
+            System.err.println("Retrying");
+            executor.execute(r);
+        }
+        
     }
 }

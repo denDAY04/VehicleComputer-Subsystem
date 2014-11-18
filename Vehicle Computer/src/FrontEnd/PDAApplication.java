@@ -13,20 +13,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import javax.swing.JApplet;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author Stensig
  */
-public class PDAApplication extends JApplet {
+public class PDAApplication extends JFrame {
     
-    /**
-     * Port number for the a handler listening for ping replies, which is always 
-     * the same across all vehicles. 
-     */
-    private final int VCUnicastPort = 2223;
     /**
      * Do not tax the unicast handler on the <code>VehicleComputer</code> with 
      * requests for tickets. 
@@ -45,14 +40,14 @@ public class PDAApplication extends JApplet {
     private PingHandler pingHandler;
     
     
-    @Override
     public void init() {
         // Read customer number from file, open multicast socket, and run GUI
         try {
             readCustomerNumber();
             socket = new DatagramSocket(localPort);
             gui = new GraphicalUserInterface(this);
-            
+            pingHandler = new PingHandler(this);
+            pingHandler.start();
             javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
                 @Override
                 public void run() {
@@ -61,19 +56,39 @@ public class PDAApplication extends JApplet {
             });
         } catch (IOException | InterruptedException | InvocationTargetException ex) {
             applicationError(ex);
-        }        
+        }       
+            
     }
     
-    @Override
-    public void start() {
-        pingHandler = new PingHandler(this);
-        pingHandler.start();
-    }
-    
-    @Override
-    public void destroy() {
-        socket.close();
-    }
+//    @Override
+//    public void init() {
+//        // Read customer number from file, open multicast socket, and run GUI
+//        try {
+//            readCustomerNumber();
+//            socket = new DatagramSocket(localPort);
+//            gui = new GraphicalUserInterface(this);
+//            
+//            javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
+//                @Override
+//                public void run() {
+//                    getContentPane().add(gui);
+//                }
+//            });
+//        } catch (IOException | InterruptedException | InvocationTargetException ex) {
+//            applicationError(ex);
+//        }        
+//    }
+//    
+//    @Override
+//    public void start() {
+//        pingHandler = new PingHandler(this);
+//        pingHandler.start();
+//    }
+//    
+//    @Override
+//    public void destroy() {
+//        socket.close();
+//    }
     
     /**
      * Reads the customer number from a properties file in the directory of the 
@@ -169,4 +184,15 @@ public class PDAApplication extends JApplet {
         return ticket;
     }
     
+    
+    /**
+     * Main method for running the application.
+     * @param args Not used. 
+     */
+    public static void main(String[] args) {
+        PDAApplication app = new PDAApplication();
+        app.init();
+        app.setSize(250, 400);
+        app.setVisible(true);
+    }
 }

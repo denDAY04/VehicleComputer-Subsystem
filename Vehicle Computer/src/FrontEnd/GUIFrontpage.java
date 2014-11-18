@@ -48,6 +48,7 @@ public class GUIFrontpage extends javax.swing.JPanel {
         btnShowTicket = new javax.swing.JButton();
         btnRoutePlanner = new javax.swing.JButton();
         labPDASeen = new javax.swing.JLabel();
+        btnEndJourney = new javax.swing.JButton();
 
         setMinimumSize(new java.awt.Dimension(250, 400));
         setPreferredSize(new java.awt.Dimension(250, 400));
@@ -75,6 +76,13 @@ public class GUIFrontpage extends javax.swing.JPanel {
         labPDASeen.setText("Your device has been registered.");
         labPDASeen.setFocusable(false);
 
+        btnEndJourney.setText("End Journey");
+        btnEndJourney.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEndJourneyActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -82,22 +90,28 @@ public class GUIFrontpage extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(50, 50, 50)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(labPDASeen, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(labPDASeen, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnRoutePlanner, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnShowTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 42, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnEndJourney)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(67, 67, 67)
+                .addContainerGap()
+                .addComponent(btnEndJourney, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(57, 57, 57)
                 .addComponent(btnShowTicket, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(64, 64, 64)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
                 .addComponent(btnRoutePlanner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
+                .addGap(47, 47, 47)
                 .addComponent(labPDASeen)
                 .addContainerGap())
         );
@@ -117,8 +131,19 @@ public class GUIFrontpage extends javax.swing.JPanel {
         // Go to website
     }//GEN-LAST:event_btnRoutePlannerActionPerformed
 
+    private void btnEndJourneyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEndJourneyActionPerformed
+        String title = "Exit application";
+        String msg = "Are you sure you want to \nend your journey?";
+        int end = JOptionPane.showConfirmDialog(parent, msg, title, JOptionPane.YES_NO_OPTION);
+        if (end == JOptionPane.YES_OPTION) {
+            System.out.println("Client closing app. . . ");
+            System.exit(1);
+        }
+    }//GEN-LAST:event_btnEndJourneyActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEndJourney;
     private javax.swing.JButton btnRoutePlanner;
     private javax.swing.JButton btnShowTicket;
     private javax.swing.JLabel labPDASeen;

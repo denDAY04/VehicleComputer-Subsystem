@@ -26,6 +26,7 @@ class PingHandler extends Thread {
     
     private final int multicastPort = 24448;
     private final int singlecastReplyPort = 24449;
+    private final String multicastAddr = "239.0.1.139";
     private MulticastSocket multiSocket;
     private int missedPings;
     private final DatagramPacket packetIn = new DatagramPacket(new byte[128], 128);
@@ -46,7 +47,10 @@ class PingHandler extends Thread {
     @Override
     public void run() {
         try {
+            // Open socket and add it to multicast group
             multiSocket = new MulticastSocket(multicastPort);
+            InetAddress group = InetAddress.getByName(multicastAddr);
+            multiSocket.joinGroup(group);
         } catch (IOException ex) {
             // If multicast socket fails, application must restart
             System.err.println("Cannot open multicast socket.");
@@ -122,7 +126,7 @@ class PingHandler extends Thread {
      * Generates a <code>byte</code> array that contains the serialized 
      * customer number field from the <code>PDAApplication</code>. 
      * @return the byte array. 
-     * @throws IOException if an I/O error occours. 
+     * @throws IOException if an I/O error occurs. 
      */
     private byte[] generateReplyBuffer() throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -136,7 +140,7 @@ class PingHandler extends Thread {
     
     /**
      * <code>Timer ActionListener</code> that is triggered when a timeout for 
-     * an expected ping has occoured, signaling that the device is no longer 
+     * an expected ping has occurred, signaling that the device is no longer 
      * in a public transportation vehicle.
      */
     class PingTimerListener implements ActionListener {
