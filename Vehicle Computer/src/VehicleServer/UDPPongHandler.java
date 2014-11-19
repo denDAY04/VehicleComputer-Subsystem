@@ -33,6 +33,7 @@ public class UDPPongHandler implements Runnable {
     @Override
     public void run() {
         try {
+            System.out.println("Pong Handler: Getting reply");
             // Deserialize reply and store it in VehicleComputer
             ByteArrayInputStream bis = new ByteArrayInputStream(packet.getData());
             ObjectInputStream ois = new ObjectInputStream(bis);
@@ -48,6 +49,7 @@ public class UDPPongHandler implements Runnable {
             InetAddress addr = packet.getAddress();
             int port = packet.getPort();
             DatagramPacket reply = new DatagramPacket(buffer, buffer.length, addr, port);
+            System.out.println("Pong Handler: Sending ack");
             socket.send(reply);
         } catch (IOException ex) {
             System.err.println("IO exception in reading pong; dropped.");

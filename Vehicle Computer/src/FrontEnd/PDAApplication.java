@@ -27,13 +27,14 @@ public class PDAApplication extends JFrame {
      * requests for tickets. 
      */
     private final int VCTicketRequestPort = 2225;
+    private final int SOCKET_TIMEOUT = (5 * 1000);     // 10 sec
     /**
      * Host name for <code>VehicleComputer</code> is set when the application is 
      * pinged. It cannot know the address of the vehicle it is currently on until 
      * it has received a ping from it. 
      */
     protected InetAddress VCHostAddr;
-    private final int localPort = 2224;
+    private final int localPort = 2220;
     protected DatagramSocket socket;
     protected String customerNumber;
     protected GraphicalUserInterface gui;
@@ -45,6 +46,7 @@ public class PDAApplication extends JFrame {
         try {
             readCustomerNumber();
             socket = new DatagramSocket(localPort);
+            socket.setSoTimeout(SOCKET_TIMEOUT);
             gui = new GraphicalUserInterface(this);
             pingHandler = new PingHandler(this);
             pingHandler.start();

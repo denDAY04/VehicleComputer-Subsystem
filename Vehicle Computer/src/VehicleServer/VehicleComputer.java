@@ -18,6 +18,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.RejectedExecutionHandler;
@@ -38,6 +39,7 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
     
     private int currenZone = 1;
     private final int pongPort = 2223;
+    private final int trafficManTargetPort = 2409;
     private PassengerList passengers;
     private TicketList tickets;
     private UDPUplinkHandler uplinkHandler;
@@ -52,16 +54,14 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
      * program startup. 
      * @param uplinkPort the port number for the Uplink handler to the business
      * logic backend.
-     * @param trafficManPort the port number for the 
-     * <code>UDPTrafficManager</code> to which this system must communicate. 
      * @param trafficManAddr the host name address for the 
      * <code>UDPTrafficManager</code> to which this system must communicate. 
      */
-    public VehicleComputer(String startZone, String uplinkPort, String trafficManPort, String trafficManAddr) {
+    public VehicleComputer(String startZone, String uplinkPort, String trafficManAddr) {
         try {
             currenZone = Integer.parseInt(startZone);
             readBackup();       // Load in passengers and tickets if there is a backup
-            uplinkHandler = new UDPUplinkHandler(uplinkPort, trafficManPort, trafficManAddr);
+            uplinkHandler = new UDPUplinkHandler(uplinkPort, trafficManTargetPort, trafficManAddr);
             downlinkHandler = new UDPDownlinkHandler(this);
             pingSender = new UDPPingSender(this);
         } catch (NumberFormatException | UnknownHostException |
@@ -81,6 +81,7 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
         executor.setRejectedExecutionHandler(new RejectPongExecuteHandler());
         DatagramSocket pongSocket = null;
         try {
+            System.out.println("VC: Waiting for Pong . . .");
             pongSocket = new DatagramSocket(pongPort);
         } catch (SocketException ex) {
             System.err.println("Could not open pong socket. Restart required.");
@@ -108,6 +109,7 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
      */
     @Override
     public void leftStation() {
+        System.out.println("VC: Left station");
         pingSender.start();
     }    
 
@@ -118,6 +120,7 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
      */
     @Override
     public void zoneTransit(int zoneEntered) {
+        System.out.println("VC: Zone transit");
         currenZone = zoneEntered;
         passengers.setZone(currenZone);
         // Update for possible new tickets
@@ -237,11 +240,6 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
     }
     
     
-    public static void main(String[] args) {
-        VehicleComputer vc = new VehicleComputer(args[0], args[1], args[2], args[3]);
-        vc.start();
-    }
-    
     class RejectPongExecuteHandler implements RejectedExecutionHandler {
 
         @Override
@@ -257,5 +255,39 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
             executor.execute(r);
         }
         
+    }
+    
+    
+    public static void main(String[] args) {
+        String[] arg = {"5", "2401", "localhost"};
+//        VehicleComputer vc = new VehicleComputer(args[0], args[1], args[2]);
+        VehicleComputer vc = new VehicleComputer(arg[0], arg[1], arg[2]);
+        vc.start();
+        
+        // Input for external signal simulation
+        Scanner cin = new Scanner(System.in);
+        while (true) {
+            switch(cin.nextLine()) {
+                case "leftstation" : 
+                    vc.leftStation();
+                    break;
+                
+                case "zonetransit" : 
+                    vc.zoneTransit(cin.nextInt());
+                    break;
+                    
+                case "quit" :
+                    System.exit(1);
+                    break;
+                    
+                default : 
+                    System.out.println("Invalid input.");
+                    System.out.println("Can be:");
+                    System.out.println("leftstation \n ");
+                    System.out.println("zonetransit \n<zone number>\n");
+                    System.out.println("quit");
+                    break;
+            }
+        }
     }
 }

@@ -42,10 +42,10 @@ public class UDPUplinkHandler {
     private byte currSeqNum = 1;
 
     
-    public UDPUplinkHandler(String localPort, String targetedPort, String targetedHost) 
+    public UDPUplinkHandler(String localPort, int targetedPort, String targetedHost) 
             throws NumberFormatException, UnknownHostException, SocketException {
         this.localPort = Integer.parseInt(localPort);
-        trafficManPort = Integer.parseInt(targetedPort);
+        trafficManPort = targetedPort;
         trafficManAddr = InetAddress.getByName(targetedHost);
         InetAddress host = InetAddress.getLocalHost();
         socket = new DatagramSocket(this.localPort, host);

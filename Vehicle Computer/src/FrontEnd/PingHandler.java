@@ -24,7 +24,7 @@ class PingHandler extends Thread {
         
     private final int PINGTIMER_TIMEOUT = (1000 * 60 * 10); // 10 minutes
     
-    private final int multicastPort = 24448;
+    private final int multicastPort = 2224;
     private final int singlecastReplyPort = 24449;
     private final String multicastAddr = "239.0.1.139";
     private MulticastSocket multiSocket;
@@ -61,7 +61,9 @@ class PingHandler extends Thread {
         while (true) {
             try {
                 // Read packet and verify its payload
+                System.out.println("PingHandler: waiting for ping . . .");
                 multiSocket.receive(packetIn);
+                System.out.println("PingHandler: datagram recieved.");
                 String payload = getData(packetIn);
                 
                 switch (payload) {
@@ -72,7 +74,8 @@ class PingHandler extends Thread {
                         byte[] reply = generateReplyBuffer();
                         InetAddress replyAddr = packetIn.getAddress();
                         DatagramPacket packetOut = new DatagramPacket(reply, reply.length, replyAddr , singlecastReplyPort);
-                        parent.socket.send(packetOut);
+                        System.out.println("PingHandler: Sending pong");
+                        multiSocket.send(packetOut);
                         break;
                         
                     case "ack":

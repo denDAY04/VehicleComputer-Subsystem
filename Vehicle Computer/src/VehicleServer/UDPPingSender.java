@@ -63,6 +63,7 @@ public class UDPPingSender extends Thread {
         byte[] buffer = bos.toByteArray();
         InetAddress addr = InetAddress.getByName(multicastAddr);
         DatagramPacket packetOut = new DatagramPacket(buffer, buffer.length, addr, targetPort);
+        System.out.println("Sending ping");
         socket.send(packetOut);
     }
     

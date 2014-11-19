@@ -54,6 +54,7 @@ public class GraphicalUserInterface extends javax.swing.JPanel {
                 ticketPanel.loadTicketData(ticket);
             } catch (IOException ex) {
                 System.err.println("I/O problems with reading ticket.");
+                return;
             }
         }        
         layout.show(this, target);
