@@ -47,11 +47,14 @@ public class UDPPingSender extends Thread {
             }
             try {
                 Thread.sleep(INTERVAL);
+                parent.filterPassengers();
             } catch (InterruptedException ex) {
                 System.out.println("Ping-sleep was interrupted.");
             }
         }        
-        System.out.println("Five pings passed. Sender terminating.");
+        System.out.println("Five pings passed. Requesting tickets");
+        parent.requestTickets();
+        System.out.println(" Sender terminating.");
         socket.close();
     }
     

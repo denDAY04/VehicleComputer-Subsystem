@@ -49,6 +49,9 @@ public class UDPUplinkHandler {
         trafficManAddr = InetAddress.getByName(targetedHost);
         InetAddress host = InetAddress.getLocalHost();
         socket = new DatagramSocket(this.localPort, host);
+
+        System.out.println("Socket opened on " + socket.getLocalSocketAddress());
+        
         timer = new Timer(TIMEOUT_DELAY, new TimeoutListener());
     }
     
@@ -65,21 +68,36 @@ public class UDPUplinkHandler {
         // Serialize passenger list and send the request to TrafficManager
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bos);
+        
+        
+        
+        passengers = new PassengerList(5);
+        for (int i = 0; i != 800; ++i) {
+            passengers.addSinglePassenger(i + 1000);
+        }
+        System.out.println("Size: " + passengers.size());
+        
+        
+        
         oos.writeObject(passengers);
         prepBufferOut(currSeqNum, bos.toByteArray());
-        packetOut = new DatagramPacket(bufferOut, bufferOut.length, trafficManAddr, trafficManPort);
+        packetOut = new DatagramPacket(bufferOut, bufferOut.length, trafficManAddr, trafficManPort);        
+        System.out.println("Sencing packet on: " + packetOut.getSocketAddress());
         sendDatagram();
         
         // Get reply, store port and addr of Handler and deserialize reply 
         bufferIn = new byte[21900]; // Test with 800 Tickets = 21,833 Byte
         DatagramPacket packetIn = new DatagramPacket(bufferIn, bufferIn.length);
+        System.out.println("UplinkHandler: Waiting for Tickets reply.");
         socket.receive(packetIn);
+        System.out.println("UplinkHandler: Got Tickets reply.");
         handlerAddr = packetIn.getAddress();
         handlerPort = packetIn.getPort();
         ObjectInputStream ois = extractData(packetIn);
         TicketList tickets = null;
         try {
             tickets = (TicketList) ois.readObject();
+            System.out.println("UplinkHandler: Tickets read successfuly.");
         } catch (ClassNotFoundException ex) {
             System.err.println("Error in reading ticket list from reply.");
             // Continue and send ack, return NULL to previous call-frame.
@@ -87,11 +105,12 @@ public class UDPUplinkHandler {
         }
         
         // Send ack
-        oos.reset();
-        bos.reset();
+        bos = new ByteArrayOutputStream();
+        oos = new ObjectOutputStream(bos);
         oos.writeObject("ack");
         prepBufferOut(++currSeqNum, bos.toByteArray());
         packetOut = new DatagramPacket(bufferOut, bufferOut.length, handlerAddr, handlerPort);
+        System.out.println("UplinkHandler: sending ack.");
         sendDatagram();
         
         // Reset sequence number and stop timer
@@ -157,6 +176,7 @@ public class UDPUplinkHandler {
             socket.send(packetOut);
         } catch (IOException ex) {
             System.err.println("I/O exception in sending reply. ");
+            ex.printStackTrace();
             try {
                 Thread.sleep(10);
             } catch (InterruptedException ex1) {
@@ -167,6 +187,7 @@ public class UDPUplinkHandler {
                 socket.send(packetOut);
             } catch (IOException ex1) {
                 System.err.println("I/O exeption #2 in sending reply. ");
+                ex1.printStackTrace();
                 System.err.println("Dropping reply.");
                 return;
             }

@@ -52,6 +52,7 @@ public class UDPDownlinkHandler extends Thread {
                 ByteArrayInputStream bis = new ByteArrayInputStream(packetIn.getData());
                 ObjectInputStream ois = new ObjectInputStream(bis);
                 String customerNum = (String) ois.readObject();
+                System.out.println("DownlinkHandler: Received cusNum: " + customerNum);
                 
                 // Get ticket, if any
                 int cusNum = Integer.parseInt(customerNum);
@@ -61,18 +62,22 @@ public class UDPDownlinkHandler extends Thread {
                 byte[] bufferOut;
                 if (ticket != null) {
                     // Serialize ticket
+                    System.out.println("Ticket found for " + ticket.getCustomerNumber());
                     ByteArrayOutputStream bos = new ByteArrayOutputStream();
                     ObjectOutputStream oos = new ObjectOutputStream(bos);
                     oos.writeObject(ticket);
                     bufferOut = bos.toByteArray();
+                    System.out.println("Buff size: " + bufferOut.length);
                 } else {
                     // Send datagram with only 1, empty byte 
+                    System.out.println("Ticket NOT found.");
                     bufferOut = new byte[1];
                 }
                 // Send reply
                 InetAddress replyAddr = packetIn.getAddress();
                 int replyPort = packetIn.getPort();
-                DatagramPacket packetOut = new DatagramPacket(bufferOut, bufferOut.length, replyAddr,replyPort);
+                DatagramPacket packetOut = new DatagramPacket(bufferOut, bufferOut.length, replyAddr, replyPort);
+                System.out.println("Sending reply on ticket request.");
                 socket.send(packetOut);
             } catch (IOException ex) {
                 System.err.println("IO exception; could not recieve datagram."

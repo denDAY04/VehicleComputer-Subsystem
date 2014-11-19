@@ -39,8 +39,9 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
     
     private int currenZone = 1;
     private final int pongPort = 2223;
-    private final int trafficManTargetPort = 2409;
-    private PassengerList passengers;
+    private final int trafficManTargetPort = 2408;
+    private PassengerList pingedPassengers;
+    private PassengerList activePassengers;
     private TicketList tickets;
     private UDPUplinkHandler uplinkHandler;
     private UDPDownlinkHandler downlinkHandler;
@@ -60,10 +61,14 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
     public VehicleComputer(String startZone, String uplinkPort, String trafficManAddr) {
         try {
             currenZone = Integer.parseInt(startZone);
-            readBackup();       // Load in passengers and tickets if there is a backup
+            // Load in passengers and tickets if there is a backup
+            if (!readBackup()) {
+//                activePassengers = new PassengerList(currenZone);
+                tickets = new TicketList();
+            }
+            pingedPassengers = new PassengerList(currenZone);
             uplinkHandler = new UDPUplinkHandler(uplinkPort, trafficManTargetPort, trafficManAddr);
             downlinkHandler = new UDPDownlinkHandler(this);
-//            pingSender = new UDPPingSender(this);
         } catch (NumberFormatException | UnknownHostException |
                 SocketException ex) {
             System.err.println("Fatal error in VehicleComputer setup.");
@@ -74,6 +79,9 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
     
     @Override
     public void run() {
+        
+        downlinkHandler.start();
+        
         BlockingQueue<Runnable> blockQueue = new ArrayBlockingQueue<>(QUEUE_SIZE);
         ThreadPoolExecutor executor = 
                 new ThreadPoolExecutor(CORE_POOL_SIZE, MAX_POOL_SIZE, EXCESS_POOL_TIMEOUT, 
@@ -90,7 +98,6 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
         }
         executor.prestartAllCoreThreads();
         while (true) {
-            // Need more work?
             DatagramPacket packetIn = new DatagramPacket(new byte[64], 64);
             try {
                 pongSocket.receive(packetIn);
@@ -130,9 +137,9 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
     public void zoneTransit(int zoneEntered) {
         System.out.println("VC: Zone transit");
         currenZone = zoneEntered;
-        passengers.setZone(currenZone);
+        pingedPassengers.setZone(currenZone);
         // Update for possible new tickets
-        tickets = requestTickets();
+        requestTickets();
     }
     
     /**
@@ -143,24 +150,39 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
         return new TicketList(tickets);
     }
     
+    public void filterPassengers() {
+        if (activePassengers == null) {
+            // Copy pinged list into active and reset pinged list
+            System.out.println("First passenger filter.");
+            activePassengers = new PassengerList(pingedPassengers);
+            pingedPassengers = new PassengerList(currenZone);
+        } else {
+            System.out.println("Subsequent passenger filter.");
+            // Store duplicates between active and pinged, in active, and reset pinged
+            activePassengers = pingedPassengers.getDuplicatePassengers(activePassengers);
+            pingedPassengers = new PassengerList(currenZone);
+        }
+    }
+    
     /**
      * Request tickets through the <code>UDPUplinkHandler</code>. Should the 
      * result be unsuccessful in getting getting a <code>TicketList</code> the
      * method will retry up to five times before commencing a system-reboot 
      * request; being unable to get tickets for its passengers is a fatal error. 
-     * @return the tickets for the <code>Passengerlist</code> field. 
+     * <p>
+     * The tickets are storeed in a filed variable.
      */
-    private TicketList requestTickets() {
+    public void requestTickets() {
         TicketList newTickets = null;
         try {   
             // Try five times
             for (int i = 0; i != 5 && newTickets == null; ++i) {
-                newTickets = uplinkHandler.getTicketList(passengers);
+                newTickets = uplinkHandler.getTicketList(activePassengers);
             }
         } catch (IOException ex) {
             try {
                 // Retry
-                newTickets = uplinkHandler.getTicketList(passengers);
+                newTickets = uplinkHandler.getTicketList(activePassengers);
             } catch (IOException ex1) {
                 // If still not successful, request a restart of the system
                 systemRestartWarning(ex1);
@@ -172,7 +194,11 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
             systemRestartWarning(new NullPointerException());
         }
         
-        return tickets;
+        tickets =  newTickets;
+        
+        
+        System.out.println("VC: Tickets size is " + tickets.size());
+        
     }
     
     /**
@@ -186,7 +212,7 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
             // Serialize passengers and tickets
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(bos);
-            oos.writeObject(passengers);
+            oos.writeObject(activePassengers);
             oos.flush();
             oos.writeObject(tickets);
             byte[] data = bos.toByteArray();
@@ -228,7 +254,7 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
             // Deserialize objects and load into fields
             ByteArrayInputStream bis = new ByteArrayInputStream(buff);
             ObjectInputStream ois = new ObjectInputStream(bis);
-            passengers = (PassengerList) ois.readObject();
+            activePassengers = (PassengerList) ois.readObject();
             tickets = (TicketList) ois.readObject();
         } catch (FileNotFoundException ex) {
             return false;
@@ -240,11 +266,11 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
     }
     
     /**
-     * Add a customer/passenger to the list of passengers. 
+     * Add a customer/passenger to the list of pinged passengers. 
      * @param CustomerNumber customer number of the passenger. 
      */
     public synchronized void addToPassengers(int CustomerNumber) {
-        passengers.addSinglePassenger(CustomerNumber);
+        pingedPassengers.addSinglePassenger(CustomerNumber);
     }
     
     
@@ -266,22 +292,43 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
     }
     
     
-    public static void main(String[] args) {
-        String[] arg = {"5", "2401", "localhost"};
+    public static void main(String[] args) throws UnknownHostException {
+        String[] arg = {"5", "2226", "192.168.239.13"};
+//        String[] arg = {"5", "2226", InetAddress.getLocalHost().getHostAddress()};
 //        VehicleComputer vc = new VehicleComputer(args[0], args[1], args[2]);
         VehicleComputer vc = new VehicleComputer(arg[0], arg[1], arg[2]);
         vc.start();
         
         // Input for external signal simulation
         Scanner cin = new Scanner(System.in);
+        System.out.println("External signal-interface. Inputs can be:");
+        System.out.println("leftstation");
+        System.out.println("zonetransit <zone number .. 1 through 5>");
+        System.out.println("quit");
         while (true) {
             switch(cin.nextLine()) {
                 case "leftstation" : 
                     vc.leftStation();
                     break;
                 
-                case "zonetransit" : 
-                    vc.zoneTransit(cin.nextInt());
+                case "zonetransit 1" : 
+                    vc.zoneTransit(1);
+                    break;
+                    
+                case "zonetransit 2" : 
+                    vc.zoneTransit(2);
+                    break;
+                        
+                case "zonetransit 3" : 
+                    vc.zoneTransit(3);
+                    break;
+                            
+                case "zonetransit 4" : 
+                    vc.zoneTransit(4);
+                    break;
+                                
+                case "zonetransit 5" : 
+                    vc.zoneTransit(5);
                     break;
                     
                 case "quit" :
@@ -291,8 +338,8 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
                 default : 
                     System.out.println("Invalid input.");
                     System.out.println("Can be:");
-                    System.out.println("leftstation \n ");
-                    System.out.println("zonetransit \n<zone number>\n");
+                    System.out.println("leftstation");
+                    System.out.println("zonetransit <zone number .. 1 through 5>");
                     System.out.println("quit");
                     break;
             }

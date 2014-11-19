@@ -29,6 +29,14 @@ public class PassengerList implements Serializable {
         passengers = new ArrayList<>();
         this.zone = zone;
     }
+    
+    /**
+     * Copy constructor.
+     * @param other passengerlist to copy from.
+     */
+    public PassengerList(PassengerList other) {
+        passengers = other.passengers;
+    }
 
     /**
      * Get all the passengers in the list.

@@ -201,7 +201,6 @@ public class UDPPacketHandler extends Thread {
             default:
                 System.err.println("Unrecognized sequence number.");
                 System.err.println("Dropping datagram.");
-                timer.start();
                 break;
         }
     }
@@ -215,19 +214,25 @@ public class UDPPacketHandler extends Thread {
      */
     private ObjectInputStream extractData() {
         bufferIn = packetIn.getData();
+//        byte[] arr = packetIn.getData();
         currSeqNum = bufferIn[SEQ_NUM_INDEX];
+//        currSeqNum = arr[SEQ_NUM_INDEX];
+        System.err.println("Seq#: " + currSeqNum);
 
         byte[] dataIn = Arrays.copyOfRange(bufferIn, (SEQ_NUM_INDEX + 1),
                                            bufferIn.length);
+//        byte[] dataIn = Arrays.copyOfRange(arr, (SEQ_NUM_INDEX + 1), arr.length);
+
         ByteArrayInputStream bis = new ByteArrayInputStream(dataIn);
-        ObjectInputStream ois= null;
         try {
-            ois = new ObjectInputStream(bis);
+           ObjectInputStream ois = new ObjectInputStream(bis);
+           return ois;
         } catch (IOException ex) {
             System.err.println("Could not extract data from datagram.");
+            ex.printStackTrace();
             currSeqNum = -1;
+            return null;
         }
-        return ois;
     }
 
     /**

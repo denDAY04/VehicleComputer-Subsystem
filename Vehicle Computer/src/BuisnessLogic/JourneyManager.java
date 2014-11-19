@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package BuisnessLogic;
 
 import java.rmi.NotBoundException;
@@ -10,8 +5,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 /**
@@ -61,42 +54,54 @@ public class JourneyManager {
      * @return a TicketList object with all of the tickets for the passengers.
      */
     public TicketList generateTickets(PassengerList passengers) {                   // called from vehicle/UDP 
-        TicketList reply = null;
-        if (passengers == null) {
-            return reply;
+//        TicketList reply = null;
+//        if (passengers == null) {
+//            return reply;
+//        }
+//
+//        /*
+//         Get already-existing tickets for passengers and filter passengers 
+//         that are without a ticket. 
+//         */
+//        reply = checkTickets(passengers);
+//        PassengerList newPassengers = getNewPassengers(passengers,
+//                                                       reply);
+//
+//        // Cet missing tickets from server and merge with existing tickets
+//        TicketList newTickets = null;
+//        try {
+//            newTickets = rmiJourneyMan.createNewTickets(newPassengers);
+//        } catch (RemoteException ex) {
+//            Logger.getLogger(JourneyManager.class.getName()).
+//                    log(Level.SEVERE, null, ex);
+//        }
+//        reply.mergeWith(newTickets);
+        TicketList reply = new TicketList();
+        for (int i = 0; i != 799; ++i) {
+            int number = 4;
+            String time = "2014-10-31 00:00:01";
+            int price = 1200;
+            int startZone = 1;
+            int customerNumber = 3;
+            Ticket ticket = new Ticket();
+            ticket.createTicket(number, time, price, startZone, customerNumber);
+            reply.addSingleTicket(ticket);
         }
-
-        /*
-         Get already-existing tickets for passengers and filter passengers 
-         that are without a ticket. 
-         */
-        reply = checkTickets(passengers);
-        PassengerList newPassengers = getNewPassengers(passengers,
-                                                       reply);
-
-        // Cet missing tickets from server and merge with existing tickets
-        TicketList newTickets = null;
-        try {
-            newTickets = rmiJourneyMan.createNewTickets(newPassengers);
-        } catch (RemoteException ex) {
-            Logger.getLogger(JourneyManager.class.getName()).
-                    log(Level.SEVERE, null, ex);
-        }
-        reply.mergeWith(newTickets);
-
+        int number = 4;
+        String time = "2014-10-31 00:00:01";
+        int price = 1200;
+        int startZone = 5;
+        int customerNumber = 1337;
+        Ticket ticket = new Ticket();
+        ticket.createTicket(number, time, price, startZone, customerNumber);
+        reply.addSingleTicket(ticket);
+        
+            
+            
+        System.out.println("JourneyMan: Generated large TicketList");
         return reply;
     }
-
-    // no yet implemneted - possibly not needed
-    public Ticket generateTicket(int customerNumber) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    // no yet implemneted - possibly not needed
-    public void sendTicketsToVehicle(TicketList tickets) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
+    
     /**
      * Get a list of tickets that are already active for the supplied list of
      * passengers.

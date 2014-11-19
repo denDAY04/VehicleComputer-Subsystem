@@ -27,11 +27,16 @@ public class PDAApplication extends JFrame {
      * requests for tickets. 
      */
     private final int VCTicketRequestPort = 2225;
+    /**
+     * The socket for fetching a ticket needs a timeout, in the case that it 
+     * does not receive a reply from the vehicle computer. If not, the GUI
+     * would freeze and lock up the application. 
+     */
     private final int SOCKET_TIMEOUT = (5 * 1000);     // 10 sec
     /**
      * Host name for <code>VehicleComputer</code> is set when the application is 
-     * pinged. It cannot know the address of the vehicle it is currently on until 
-     * it has received a ping from it. 
+     * pinged. It cannot know the address of the vehicle it is currently on 
+     * until it has received a ping from it. 
      */
     protected InetAddress VCHostAddr;
     private final int localPort = 2220;
@@ -61,36 +66,6 @@ public class PDAApplication extends JFrame {
         }       
             
     }
-    
-//    @Override
-//    public void init() {
-//        // Read customer number from file, open multicast socket, and run GUI
-//        try {
-//            readCustomerNumber();
-//            socket = new DatagramSocket(localPort);
-//            gui = new GraphicalUserInterface(this);
-//            
-//            javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
-//                @Override
-//                public void run() {
-//                    getContentPane().add(gui);
-//                }
-//            });
-//        } catch (IOException | InterruptedException | InvocationTargetException ex) {
-//            applicationError(ex);
-//        }        
-//    }
-//    
-//    @Override
-//    public void start() {
-//        pingHandler = new PingHandler(this);
-//        pingHandler.start();
-//    }
-//    
-//    @Override
-//    public void destroy() {
-//        socket.close();
-//    }
     
     /**
      * Reads the customer number from a properties file in the directory of the 
@@ -149,7 +124,8 @@ public class PDAApplication extends JFrame {
      * @return the ticket for the application's customer number, or NULL if no
      * valid ticket was found or the application has not yet been pinged, and 
      * thus does not know what address to contact. 
-     * @throws IOException If the reply could not be read as a <code>Ticket</code>. 
+     * @throws IOException If the reply could not be read as a 
+     * <code>Ticket</code>. 
      */
     public Ticket getTicket() throws IOException {
         // If no ping has been recived yet the application will not know the out-address
@@ -167,9 +143,11 @@ public class PDAApplication extends JFrame {
         socket.send(packetOut);
         
         // Get reply and check for valid ticket
-        int arr_len = 150;      // Test gave serialized Ticket as 137 bytes
-        DatagramPacket packetIn = new DatagramPacket(new byte[arr_len], arr_len);
+        int arrLen = 254;      // Serialized Ticket + header, about 160 bytes
+        DatagramPacket packetIn = new DatagramPacket(new byte[arrLen], arrLen);
+        System.out.println("Waiting for reply from VC.");
         socket.receive(packetIn);
+        System.out.println("Reply received.");
         Ticket ticket = null;
         byte[] dataBuff = packetIn.getData();
         
@@ -194,7 +172,8 @@ public class PDAApplication extends JFrame {
     public static void main(String[] args) {
         PDAApplication app = new PDAApplication();
         app.init();
-        app.setSize(250, 400);
+        app.setSize(260, 410);
         app.setVisible(true);
+        app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }

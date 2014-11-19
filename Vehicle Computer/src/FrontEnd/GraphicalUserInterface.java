@@ -40,20 +40,26 @@ public class GraphicalUserInterface extends javax.swing.JPanel {
      */
     public void switchPanel(String target) {
         if (target.equals("Ticket")) {
+            boolean error = false;
             try {
                 Ticket ticket = parent.getTicket();
                 if (ticket == null) {
-                    String title = "Ticket Error";
-                    String msg = "No ticket was found."
-                            + "\nPlease try again in 10 seconds "
-                            + "\nand if the problem persists"
-                            + "\nsee www.1415.dk";
-                    JOptionPane.showMessageDialog(parent, msg, title, JOptionPane.INFORMATION_MESSAGE);
-                    return;
+                    error = true;
+                } else {
+                    ticketPanel.loadTicketData(ticket);
                 } 
-                ticketPanel.loadTicketData(ticket);
             } catch (IOException ex) {
                 System.err.println("I/O problems with reading ticket.");
+                ex.printStackTrace();
+                error = true;
+            }
+            if (error) {
+                String title = "Ticket Error";
+                String msg = "No ticket was found."
+                        + "\nPlease try again in 10 seconds "
+                        + "\nand if the problem persists"
+                        + "\nsee www.1415.dk";
+                JOptionPane.showMessageDialog(parent, msg, title, JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
         }        

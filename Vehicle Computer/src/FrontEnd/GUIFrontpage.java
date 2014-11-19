@@ -71,7 +71,7 @@ public class GUIFrontpage extends javax.swing.JPanel {
             }
         });
 
-        labPDASeen.setForeground(new java.awt.Color(51, 255, 0));
+        labPDASeen.setForeground(new java.awt.Color(51, 102, 0));
         labPDASeen.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         labPDASeen.setText("Your device has been registered.");
         labPDASeen.setFocusable(false);
@@ -109,9 +109,9 @@ public class GUIFrontpage extends javax.swing.JPanel {
                 .addComponent(btnEndJourney, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(57, 57, 57)
                 .addComponent(btnShowTicket, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
                 .addComponent(btnRoutePlanner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(47, 47, 47)
+                .addGap(56, 56, 56)
                 .addComponent(labPDASeen)
                 .addContainerGap())
         );

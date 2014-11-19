@@ -22,10 +22,10 @@ import javax.swing.Timer;
  */
 class PingHandler extends Thread {
         
-    private final int PINGTIMER_TIMEOUT = (1000 * 60 * 10); // 10 minutes
+    private final int PINGTIMER_TIMEOUT = (1000 * 60 * 1); // 10 minutes
     
     private final int multicastPort = 2224;
-    private final int singlecastReplyPort = 24449;
+    private final int singlecastReplyPort = 2223;
     private final String multicastAddr = "239.0.1.139";
     private MulticastSocket multiSocket;
     private int missedPings;
@@ -79,6 +79,7 @@ class PingHandler extends Thread {
                         break;
                         
                     case "ack":
+                        System.out.println("PingHandler: Ack received");
                         missedPings = 0;
                         // Show in gui that the device has been pinged, and start timer
                         parent.gui.enablePingLabel(true);
@@ -151,6 +152,7 @@ class PingHandler extends Thread {
         @Override
         public void actionPerformed(ActionEvent e) {
             parent.gui.enablePingLabel(false);
+            pingTimer.stop();
         }
         
     }
