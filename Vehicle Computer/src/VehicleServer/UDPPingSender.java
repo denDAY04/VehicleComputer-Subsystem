@@ -52,6 +52,7 @@ public class UDPPingSender extends Thread {
             }
         }        
         System.out.println("Five pings passed. Sender terminating.");
+        socket.close();
     }
     
     private void ping() throws IOException {

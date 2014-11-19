@@ -63,7 +63,7 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
             readBackup();       // Load in passengers and tickets if there is a backup
             uplinkHandler = new UDPUplinkHandler(uplinkPort, trafficManTargetPort, trafficManAddr);
             downlinkHandler = new UDPDownlinkHandler(this);
-            pingSender = new UDPPingSender(this);
+//            pingSender = new UDPPingSender(this);
         } catch (NumberFormatException | UnknownHostException |
                 SocketException ex) {
             System.err.println("Fatal error in VehicleComputer setup.");
@@ -110,7 +110,15 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
     @Override
     public void leftStation() {
         System.out.println("VC: Left station");
-        pingSender.start();
+        try {
+            pingSender = new UDPPingSender(this);
+            pingSender.start();
+        } catch (SocketException ex) {
+            System.err.println("Fatal error in VehicleComputer ping initiation.");
+            ex.printStackTrace();
+            System.exit(-1);
+        }
+        
     }    
 
     /**
