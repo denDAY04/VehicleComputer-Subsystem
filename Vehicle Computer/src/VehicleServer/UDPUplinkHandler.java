@@ -67,18 +67,7 @@ public class UDPUplinkHandler {
     public TicketList getTicketList(PassengerList passengers) throws IOException {
         // Serialize passenger list and send the request to TrafficManager
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(bos);
-        
-        
-        
-        passengers = new PassengerList(5);
-        for (int i = 0; i != 800; ++i) {
-            passengers.addSinglePassenger(i + 1000);
-        }
-        System.out.println("Size: " + passengers.size());
-        
-        
-        
+        ObjectOutputStream oos = new ObjectOutputStream(bos);       
         oos.writeObject(passengers);
         prepBufferOut(currSeqNum, bos.toByteArray());
         packetOut = new DatagramPacket(bufferOut, bufferOut.length, trafficManAddr, trafficManPort);        
