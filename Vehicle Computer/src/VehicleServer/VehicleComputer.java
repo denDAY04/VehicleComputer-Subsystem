@@ -293,10 +293,10 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
     
     
     public static void main(String[] args) throws UnknownHostException {
-        String[] arg = {"5", "2226", "192.168.239.13"};
+//        String[] arg = {"5", "2226", "192.168.239.13"};
 //        String[] arg = {"5", "2226", InetAddress.getLocalHost().getHostAddress()};
-//        VehicleComputer vc = new VehicleComputer(args[0], args[1], args[2]);
-        VehicleComputer vc = new VehicleComputer(arg[0], arg[1], arg[2]);
+//        VehicleComputer vc = new VehicleComputer(arg[0], arg[1], arg[2]);
+        VehicleComputer vc = new VehicleComputer(args[0], args[1], args[2]);
         vc.start();
         
         // Input for external signal simulation

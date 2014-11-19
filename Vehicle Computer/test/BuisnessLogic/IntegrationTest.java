@@ -1,11 +1,13 @@
-package BuisnessLogic;
 
+
+import BuisnessLogic.JourneyManagerRMISkel;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-
+import BuisnessLogic.PassengerList;
+import BuisnessLogic.UDPTrafficManager;
 
 /**
  * Integration testing of the different classes' abilities to work together to
@@ -22,11 +24,10 @@ public class IntegrationTest extends Thread {
     @Override
     public void run() {
         // Start UDPTrafficManager's main()
-        String udpPort = "2408";
         String rmiHost = "localhost";
-        String rmiPort = "2708";
+        String rmiPort = "5708";
         String rmiImplName = "jmImpl";
-        String[] tmArgs = {udpPort, rmiHost, rmiPort, rmiImplName};
+        String[] tmArgs = {rmiHost, rmiPort, rmiImplName};
         UDPTrafficManager.main(tmArgs);        
     }
 
@@ -75,7 +76,7 @@ public class IntegrationTest extends Thread {
         socket = new DatagramSocket();
 
         // Create RMI registry 
-        int port = 2708;
+        int port = 5708;
         JourneyManagerRMITestImpl rmiImpl = new JourneyManagerRMITestImpl();
         String name = "jmImpl";
         openRMIRegistry(port, rmiImpl, name);        
@@ -89,12 +90,12 @@ public class IntegrationTest extends Thread {
         clients. This tries to invoke and simulate multiple requests to the 
         UDPTrafficManager and RMI registry. 
         */
-        TempClient client = new TempClient();
-        TempClient client2 = new TempClient();
-        TempClient client3 = new TempClient();
-        client.start();
-        client2.start();
-        client3.start();
+//        TempClient client = new TempClient();
+//        TempClient client2 = new TempClient();
+//        TempClient client3 = new TempClient();
+//        client.start();
+//        client2.start();
+//        client3.start();
     }
 
 }
