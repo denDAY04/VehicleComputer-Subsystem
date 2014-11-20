@@ -72,7 +72,6 @@ public class UDPUplinkHandler {
         oos.writeObject(passengers);
         prepBufferOut(currSeqNum, bos.toByteArray());
         packetOut = new DatagramPacket(bufferOut, bufferOut.length, trafficManAddr, trafficManPort);        
-        System.out.println("UplinkHandler: packet outbound to " + packetOut.getSocketAddress());
         sendDatagram();
         
         // Get reply, store port and addr of Handler and deserialize reply 
@@ -163,6 +162,7 @@ public class UDPUplinkHandler {
      */
     private void sendDatagram() {
         try {
+            System.out.println("UplinkH: packet to " + packetOut.getSocketAddress());
             socket.send(packetOut);
         } catch (IOException ex) {
             System.err.println("I/O exception in sending reply. ");

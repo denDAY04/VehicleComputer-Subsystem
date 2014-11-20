@@ -214,14 +214,11 @@ public class UDPPacketHandler extends Thread {
      */
     private ObjectInputStream extractData() {
         bufferIn = packetIn.getData();
-//        byte[] arr = packetIn.getData();
         currSeqNum = bufferIn[SEQ_NUM_INDEX];
-//        currSeqNum = arr[SEQ_NUM_INDEX];
         System.err.println("Seq#: " + currSeqNum);
 
         byte[] dataIn = Arrays.copyOfRange(bufferIn, (SEQ_NUM_INDEX + 1),
                                            bufferIn.length);
-//        byte[] dataIn = Arrays.copyOfRange(arr, (SEQ_NUM_INDEX + 1), arr.length);
 
         ByteArrayInputStream bis = new ByteArrayInputStream(dataIn);
         try {
@@ -263,11 +260,11 @@ public class UDPPacketHandler extends Thread {
      * triggered, or 2) the client resends its datagram.
      */
     private void sendReply() {
-        System.out.println("Sending data");
         packetOut = new DatagramPacket(bufferOut, bufferOut.length, destAddr,
                                        destPort);
 
         try {
+            System.out.println("Sending data to " + packetOut.getSocketAddress());
             socket.send(packetOut);
         } catch (IOException ex) {
             System.err.println("I/O exception in sending reply. ");

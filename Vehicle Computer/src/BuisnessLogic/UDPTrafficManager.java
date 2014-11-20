@@ -152,7 +152,7 @@ public class UDPTrafficManager {
                 packet = new DatagramPacket(new byte[BUFFER_IN_SIZE],
                                             BUFFER_IN_SIZE);
                 manager.socket.receive(packet);
-                System.out.println("TM: Packet received.");
+                System.out.println("TM: Packet received from " + packet.getSocketAddress());
                 manager.distributeDatagram(packet);
             } catch (IOException ex) {
                 System.err.println("-- UDPTrafficManager --");

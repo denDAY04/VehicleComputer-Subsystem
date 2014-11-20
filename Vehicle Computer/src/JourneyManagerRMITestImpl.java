@@ -34,7 +34,7 @@ public class JourneyManagerRMITestImpl extends UnicastRemoteObject implements Jo
         ticket2.createTicket(numbers[1], times[1], prices[1], startZones[1],
                              customerNumbers[1]);
         Ticket ticket3 = new Ticket();
-        ticket3.createTicket(6, "2014-11-16",1200, 1,1337);
+        ticket3.createTicket(6, "2014-11-16 00:00:03",1200, 1,1337);
         
         tickets = new TicketList();
         tickets.addSingleTicket(ticket1);
