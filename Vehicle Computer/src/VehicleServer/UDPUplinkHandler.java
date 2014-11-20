@@ -29,10 +29,10 @@ public class UDPUplinkHandler {
     private final int SEQ_NUM_INDEX = 0;
     private final int TIMEOUT_DELAY = (1000 * 4);       // 4 seconds
     
-    private final int localPort; // was 2226
-    private final int trafficManPort;       // Const port to TrafficManager
+    private final int localPort; 
+    private final int trafficManPort;           // Const port to TrafficManager
     private final InetAddress trafficManAddr;   // Const addr to TrafficManager
-    private int handlerPort;                // Dynamic post to service handler
+    private int handlerPort;                // Dynamic port to service handler
     private InetAddress handlerAddr;        // Dynamic addr to service handler
     private final DatagramSocket socket;
     private DatagramPacket packetOut;
@@ -48,9 +48,10 @@ public class UDPUplinkHandler {
         trafficManPort = targetedPort;
         trafficManAddr = InetAddress.getByName(targetedHost);
         InetAddress host = InetAddress.getLocalHost();
-        socket = new DatagramSocket(this.localPort, host);
+//        socket = new DatagramSocket(this.localPort, host);
+        socket = new DatagramSocket(this.localPort);
 
-        System.out.println("Socket opened on " + socket.getLocalSocketAddress());
+        System.out.println("UplinkHandler: Socket opened on " + socket.getLocalSocketAddress());
         
         timer = new Timer(TIMEOUT_DELAY, new TimeoutListener());
     }
@@ -71,7 +72,7 @@ public class UDPUplinkHandler {
         oos.writeObject(passengers);
         prepBufferOut(currSeqNum, bos.toByteArray());
         packetOut = new DatagramPacket(bufferOut, bufferOut.length, trafficManAddr, trafficManPort);        
-        System.out.println("Sencing packet on: " + packetOut.getSocketAddress());
+        System.out.println("UplinkHandler: packet outbound to " + packetOut.getSocketAddress());
         sendDatagram();
         
         // Get reply, store port and addr of Handler and deserialize reply 

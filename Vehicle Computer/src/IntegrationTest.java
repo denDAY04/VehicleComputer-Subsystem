@@ -84,18 +84,6 @@ public class IntegrationTest extends Thread {
         // Run UDPTrafficManager in seperate thread through this <code>Class</code>
         IntegrationTest test = new IntegrationTest();
         test.start();
-        
-        /*
-        Send request for service to UDPTraffiManager through three temporary 
-        clients. This tries to invoke and simulate multiple requests to the 
-        UDPTrafficManager and RMI registry. 
-        */
-//        TempClient client = new TempClient();
-//        TempClient client2 = new TempClient();
-//        TempClient client3 = new TempClient();
-//        client.start();
-//        client2.start();
-//        client3.start();
     }
 
 }

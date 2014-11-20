@@ -33,14 +33,14 @@ public class UDPTrafficManager {
      * serialized <code>PassengerList</code>. Test showed a size of 8207 bytes.
      * Actual size is 8,300 for good measure.
      */
-    protected static final int BUFFER_IN_SIZE = 8300;
+    public static final int BUFFER_IN_SIZE = 8300;
 
     /**
      * Size for a <code>byte</code> buffer tested to hold 800 tickets in a
      * serialized <code>TicketList</code>. Test showed a size of 21,833 bytes.
      * Actual size is 21,900 for good measure.
      */
-    protected static final int BUFFER_OUT_SIZE = 21900;
+    public static final int BUFFER_OUT_SIZE = 22000;
 
     private DatagramSocket socket;
     private String rmiHost, rmiJournayManagerName;
@@ -55,7 +55,8 @@ public class UDPTrafficManager {
     private void openUDPSocket() {
         try {
             InetAddress hostAddr = InetAddress.getLocalHost();
-            socket = new DatagramSocket(localPort, hostAddr);
+//            socket = new DatagramSocket(localPort, hostAddr);
+            socket = new DatagramSocket(localPort);
             System.out.println("TrafficManager port opened on: " + socket.getLocalSocketAddress());
         } catch (NumberFormatException | UnknownHostException | SocketException ex) {
             System.err.println("Fatal error in UPDTrafficManager.");
@@ -130,7 +131,7 @@ public class UDPTrafficManager {
      * <code>UDPPacketHandler</code>, and <code>JourneyManager</code>.
      * <p>
      * @param args
-     *             <ul>
+     * <ul>
      * <li>0 : host name for the RMI registry server.
      * <li>1 : port number for the RMI registry server.
      * <li>2 : name of the <code>JourneyManager</code> implementation class in

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package VehicleServer;
 
 import BuisnessLogic.*;
@@ -26,8 +21,13 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- *
- * @author Stensig
+ * The backbone - main class - of the systems running on the vehicle. Maintains 
+ * awareness of the customers on board the vehicle and their tickets, and 
+ * distributes ping, pong, and ticket-preview requests from the passengers to 
+ * other classes. 
+ * 
+ * @author Andreas Stensig Jensen, on 01-11-2014
+ * Contributors: 
  */
 public class VehicleComputer extends Thread implements ExternalVehicleSignals{
     
@@ -37,7 +37,7 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
     private final int MAX_POOL_SIZE = 20;
     private final int EXCESS_POOL_TIMEOUT = 30;         // in seconds
     
-    private int currenZone = 1;
+    private int currentZone = 1;
     private final int pongPort = 2223;
     private final int trafficManTargetPort = 2408;
     private PassengerList pingedPassengers;
@@ -60,13 +60,13 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
      */
     public VehicleComputer(String startZone, String uplinkPort, String trafficManAddr) {
         try {
-            currenZone = Integer.parseInt(startZone);
-            // Load in passengers and tickets if there is a backup
+            currentZone = Integer.parseInt(startZone);
+            // Load passengers and tickets from backup, or manual initialize
             if (!readBackup()) {
-//                activePassengers = new PassengerList(currenZone);
+                activePassengers = null;
                 tickets = new TicketList();
             }
-            pingedPassengers = new PassengerList(currenZone);
+            pingedPassengers = new PassengerList(currentZone);
             uplinkHandler = new UDPUplinkHandler(uplinkPort, trafficManTargetPort, trafficManAddr);
             downlinkHandler = new UDPDownlinkHandler(this);
         } catch (NumberFormatException | UnknownHostException |
@@ -77,16 +77,21 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
         }
     }
     
+    /**
+     * Non-terminating <code>run()</code> method that maintains a 
+     * <code>ThreadPool</code> with worker threads for handling pong replies 
+     * from client PDAs on board the vehicle. 
+     */
     @Override
     public void run() {
-        
         downlinkHandler.start();
         
+        // Create a thead pool with a blocking queue
         BlockingQueue<Runnable> blockQueue = new ArrayBlockingQueue<>(QUEUE_SIZE);
-        ThreadPoolExecutor executor = 
-                new ThreadPoolExecutor(CORE_POOL_SIZE, MAX_POOL_SIZE, EXCESS_POOL_TIMEOUT, 
-                        TimeUnit.SECONDS, blockQueue);
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(CORE_POOL_SIZE, MAX_POOL_SIZE, EXCESS_POOL_TIMEOUT, TimeUnit.SECONDS, blockQueue);
         executor.setRejectedExecutionHandler(new RejectPongExecuteHandler());
+        
+        // Open socket for pong replies and prestart executor threads
         DatagramSocket pongSocket = null;
         try {
             System.out.println("VC: Waiting for Pong . . .");
@@ -97,6 +102,8 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
             System.exit(-1);
         }
         executor.prestartAllCoreThreads();
+        
+        // Listen for pongs and distribute them to executor threads
         while (true) {
             DatagramPacket packetIn = new DatagramPacket(new byte[64], 64);
             try {
@@ -104,6 +111,7 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
                 executor.execute(new UDPPongHandler(this, packetIn));
             } catch (IOException ex) {
                 System.err.println("Could not receive pong packet; dropping.");
+                ex.printStackTrace();
             }
         }
     }
@@ -136,8 +144,8 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
     @Override
     public void zoneTransit(int zoneEntered) {
         System.out.println("VC: Zone transit");
-        currenZone = zoneEntered;
-        pingedPassengers.setZone(currenZone);
+        currentZone = zoneEntered;
+        pingedPassengers.setZone(currentZone);
         // Update for possible new tickets
         requestTickets();
     }
@@ -150,17 +158,26 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
         return new TicketList(tickets);
     }
     
+    /**
+     * Compare the list of pinged passengers with the list of active passengers.
+     * The result overrides the list of active passengers, thus keeping that 
+     * list updated, while the list of pinged passengers is cleared. 
+     * <p>
+     * Test with 800 passengers show an execution time at around seven to eight
+     * milliseconds, which is acceptable for being used in-between pings going
+     * out with an interval of about a second. 
+     */
     public void filterPassengers() {
         if (activePassengers == null) {
             // Copy pinged list into active and reset pinged list
             System.out.println("First passenger filter.");
             activePassengers = new PassengerList(pingedPassengers);
-            pingedPassengers = new PassengerList(currenZone);
+            pingedPassengers = new PassengerList(currentZone);
         } else {
             System.out.println("Subsequent passenger filter.");
             // Store duplicates between active and pinged, in active, and reset pinged
             activePassengers = pingedPassengers.getDuplicatePassengers(activePassengers);
-            pingedPassengers = new PassengerList(currenZone);
+            pingedPassengers = new PassengerList(currentZone);
         }
     }
     
@@ -170,7 +187,7 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
      * method will retry up to five times before commencing a system-reboot 
      * request; being unable to get tickets for its passengers is a fatal error. 
      * <p>
-     * The tickets are storeed in a filed variable.
+     * The tickets are stored in a field variable.
      */
     public void requestTickets() {
         TicketList newTickets = null;
@@ -194,11 +211,7 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
             systemRestartWarning(new NullPointerException());
         }
         
-        tickets =  newTickets;
-        
-        
-        System.out.println("VC: Tickets size is " + tickets.size());
-        
+        tickets =  newTickets;     
     }
     
     /**
@@ -274,6 +287,13 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
     }
     
     
+    /**
+     * Custom <code>RejectedExecutionHandler</code> for handling rejected 
+     * <code>Runnable</code> tasks for a <code>ThreadPool</code>. 
+     * <p>
+     * This implementation pauses the attempt for 10 milliseconds before trying
+     * to execute it again.
+     */
     class RejectPongExecuteHandler implements RejectedExecutionHandler {
 
         @Override
@@ -292,10 +312,19 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals{
     }
     
     
-    public static void main(String[] args) throws UnknownHostException {
-//        String[] arg = {"5", "2226", "192.168.239.13"};
-//        String[] arg = {"5", "2226", InetAddress.getLocalHost().getHostAddress()};
-//        VehicleComputer vc = new VehicleComputer(arg[0], arg[1], arg[2]);
+    /**
+     * Main method for running the <code>VehicleComputer</code> and its 
+     * associated classes in the Vehicle server. 
+     * @param args
+     * <ul>
+     * <li>0 : Start zone for the vehicle
+     * <li>1 : Port number for socket uplinking to 
+     * <code>UDPTrafficManager</code>
+     * <li>2 : IPv4 literal address for location of 
+     * <code>UDPTrafficManager</code>. 
+     * </ul>
+     */
+    public static void main(String[] args) {
         VehicleComputer vc = new VehicleComputer(args[0], args[1], args[2]);
         vc.start();
         

@@ -37,7 +37,7 @@ public class PDAApplication extends JFrame {
      * Host name for <code>VehicleComputer</code> is set when the application is 
      * pinged. It cannot know the address of the vehicle it is currently on 
      * until it has received a ping from it. 
-     */
+     */ 
     protected InetAddress VCHostAddr;
     private final int localPort = 2220;
     protected DatagramSocket socket;

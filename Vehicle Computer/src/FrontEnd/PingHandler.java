@@ -43,7 +43,7 @@ class PingHandler extends Thread {
         this.parent = parent;
         pingTimer = new Timer(PINGTIMER_TIMEOUT, new PingTimerListener());
     }
-
+    
     @Override
     public void run() {
         try {
