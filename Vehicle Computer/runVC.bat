@@ -1,1 +1,1 @@
-java VehicleServer.VehicleComputer 1 2226 thelizard6.eitlab.ihk-edu.dk   //192.168.239.13
+java VehicleServer.VehicleComputer 1 2226 thelizard6.eitlab.ihk-edu.dk   

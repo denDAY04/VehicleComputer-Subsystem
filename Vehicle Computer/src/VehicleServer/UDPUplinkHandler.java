@@ -78,6 +78,7 @@ public class UDPUplinkHandler {
         bufferIn = new byte[21900]; // Test with 800 Tickets = 21,833 Byte
         DatagramPacket packetIn = new DatagramPacket(bufferIn, bufferIn.length);
         System.out.println("UplinkHandler: Waiting for Tickets reply.");
+        System.out.println("On " + socket.getLocalSocketAddress());
         socket.receive(packetIn);
         System.out.println("UplinkHandler: Got Tickets reply.");
         handlerAddr = packetIn.getAddress();

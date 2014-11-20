@@ -265,6 +265,7 @@ public class UDPPacketHandler extends Thread {
 
         try {
             System.out.println("Sending data to " + packetOut.getSocketAddress());
+            System.out.println("--from + " + socket.getLocalSocketAddress());
             socket.send(packetOut);
         } catch (IOException ex) {
             System.err.println("I/O exception in sending reply. ");
