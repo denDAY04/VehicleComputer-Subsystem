@@ -1,6 +1,6 @@
 package FrontEnd;
 
-import BuisnessLogic.Ticket;
+import BusinessLogic.Ticket;
 
 
 

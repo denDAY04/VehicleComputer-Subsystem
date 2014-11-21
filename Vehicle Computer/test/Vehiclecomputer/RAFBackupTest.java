@@ -1,7 +1,7 @@
 package Vehiclecomputer;
 
-import BuisnessLogic.PassengerList;
-import BuisnessLogic.TicketList;
+import BusinessLogic.PassengerList;
+import BusinessLogic.TicketList;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

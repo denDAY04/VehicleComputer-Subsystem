@@ -1,7 +1,7 @@
 package VehicleServer;
 
-import BuisnessLogic.PassengerList;
-import BuisnessLogic.TicketList;
+import BusinessLogic.PassengerList;
+import BusinessLogic.TicketList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.ByteArrayInputStream;

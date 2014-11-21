@@ -1,6 +1,6 @@
 package FrontEnd;
 
-import BuisnessLogic.Ticket;
+import BusinessLogic.Ticket;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;

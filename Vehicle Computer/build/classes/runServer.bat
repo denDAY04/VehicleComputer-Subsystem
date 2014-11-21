@@ -1,1 +1,1 @@
-java IntegrationTest
+java BusinessLogic.UDPTrafficManager {RMI_hostname} {RMI_por} {RMI_look-up_name}

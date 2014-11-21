@@ -1,13 +1,13 @@
 
 
-import BuisnessLogic.JourneyManagerRMISkel;
+import BusinessLogic.JourneyManagerRMISkel;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import BuisnessLogic.PassengerList;
-import BuisnessLogic.UDPTrafficManager;
+import BusinessLogic.PassengerList;
+import BusinessLogic.UDPTrafficManager;
 
 /**
  * Integration testing of the different classes' abilities to work together to
