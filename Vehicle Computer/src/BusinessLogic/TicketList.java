@@ -6,14 +6,15 @@ import java.util.Objects;
 
 
 /**
- * Model class containing an ArrayList of Ticket model objects.
+ * Model class containing an <code>ArrayList</code> of <code>Ticket</code> model
+ * objects.
  * <p>
  * @author Andreas Stensig Jensen on Oct 30, 2014
  * Contributors:
- * N/A
+ * Jonas Grum-Schwensen
  */
 public class TicketList implements Serializable {
-
+    
     private ArrayList<Ticket> tickets;
 
     /**
@@ -56,8 +57,7 @@ public class TicketList implements Serializable {
     }
 
     /**
-     * Combine the TicketList with another TicketList. Does not check for
-     * duplicates.
+     * Combine the list with another list. Does not check for duplicates.
      * <p>
      * @param other TicketList to be merged with the current object.
      */
@@ -85,8 +85,7 @@ public class TicketList implements Serializable {
                 return t;
             }
         }
-
-        return null;        // No valid ticket found
+        return null;     
     }
 
     /**
@@ -130,11 +129,11 @@ public class TicketList implements Serializable {
 
     /**
      * Equals override.
-     * Two TicketList objects are equal if and only if neither contains an
-     * unique Ticket elements, e.i. every Ticket in one list also has to be in
-     * the other.
+     * Two lists are equal if and only if neither contains a unique 
+     * <code>Ticket</code> elements, e.i. every <code>Ticket</code> in one list 
+     * also has to be in the other.
      * <p>
-     * @param obj other TicketList to compare with for equality.
+     * @param obj other <code>TicketList</code> to compare with for equality.
      * <p>
      * @return true if the two objects are equal; false otherwise.
      */
@@ -149,11 +148,11 @@ public class TicketList implements Serializable {
         final TicketList other = (TicketList) obj;
 
         ArrayList<Ticket> otherTickets = other.getAllTickets();
-        // If size is not the same, unique tickets must exist.
+        /*If size is not the same, unique tickets must exist.*/
         if (otherTickets.size() != tickets.size()) {
             return false;
         }
-        // Check for unique tickets.
+        /*Check for unique tickets.*/
         for (Ticket t : tickets) {
             if (otherTickets.contains(t) == false) {
                 return false;
@@ -161,6 +160,5 @@ public class TicketList implements Serializable {
         }
         return true;
     }
-
-
+    
 }

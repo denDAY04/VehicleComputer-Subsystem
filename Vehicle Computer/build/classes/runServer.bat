@@ -1,1 +1,1 @@
-java BusinessLogic.UDPTrafficManager {RMI_hostname} {RMI_por} {RMI_look-up_name}
+java BusinessLogic.UDPTrafficManager {RMI_hostname} {RMI_port} {RMI_impl-class_look-up_name}

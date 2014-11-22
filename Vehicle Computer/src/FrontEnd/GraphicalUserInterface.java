@@ -6,10 +6,11 @@ import java.io.IOException;
 import javax.swing.JOptionPane;
 
 
-
 /**
- *
- * @author AndreasStensig
+ * The backbone panel of the GUI for the PDA application.
+ * <p>
+ * @author Andreas Stensig Jensen on Nov 5th, 2014
+ * Contributors:
  */
 public class GraphicalUserInterface extends javax.swing.JPanel {
 
@@ -17,17 +18,18 @@ public class GraphicalUserInterface extends javax.swing.JPanel {
     private final GUITicket ticketPanel;
     private final GUIFrontpage frontPagePanel;
     private final PDAApplication parent;
-    
+
     /**
-     * Creates new form GraphicalUserInterface
-     * @param parent the application using the gui.
+     * Create new form GraphicalUserInterface.
+     * <p>
+     * @param parent the application using the GUI.
      */
     public GraphicalUserInterface(PDAApplication parent) {
         initComponents();
         layout = new CardLayout();
         this.setLayout(layout);
         this.parent = parent;
-        
+
         frontPagePanel = new GUIFrontpage(this);
         ticketPanel = new GUITicket(this);
         this.add(frontPagePanel, "Front");
@@ -35,8 +37,9 @@ public class GraphicalUserInterface extends javax.swing.JPanel {
     }
 
     /**
-     * Switch to another pane in the <code>GraphicalUserInterface</code>.
-     * @param target the pane to switch to, either "Ticket" or "Front".
+     * Switch to another panel in the <code>GraphicalUserInterface</code>.
+     * <p>
+     * @param target the panel to switch to: Either "Ticket" or "Front".
      */
     public void switchPanel(String target) {
         if (target.equals("Ticket")) {
@@ -47,34 +50,37 @@ public class GraphicalUserInterface extends javax.swing.JPanel {
                     error = true;
                 } else {
                     ticketPanel.loadTicketData(ticket);
-                } 
+                }
             } catch (IOException ex) {
                 System.err.println("I/O problems with reading ticket.");
                 ex.printStackTrace();
                 error = true;
             }
+            
             if (error) {
                 String title = "Ticket Error";
                 String msg = "No ticket was found."
                         + "\nPlease try again in 10 seconds "
                         + "\nand if the problem persists"
                         + "\nsee www.1415.dk";
-                JOptionPane.showMessageDialog(parent, msg, title, JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(parent, msg, title,
+                                              JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
-        }        
+        }
         layout.show(this, target);
     }
-    
+
     /**
-     * Enable the ping lable on the Front page of the gui, depening on the 
+     * Enable the ping label on the Front page of the GUI, depending on the
      * parameter.
-     * @param enable true if lable should be shown, false otherwise. 
+     * <p>
+     * @param enable true if label should be shown, false otherwise.
      */
     public void enablePingLabel(boolean enable) {
         frontPagePanel.showPingLable(enable);
     }
-    
+
     /**
      * This method is called from within the constructor to
      * initialize the form.

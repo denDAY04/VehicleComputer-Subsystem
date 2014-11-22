@@ -3,9 +3,7 @@ package BusinessLogic;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
@@ -13,7 +11,7 @@ import java.rmi.RemoteException;
 /**
  * Manager for incoming service requests from <code>VehicleComputer</code>
  * clients. This class captures the UDP request and instantiates a new instance
- * of of the <code>UDPPacketHandler</code> class. This class is then passed
+ * of of the <code>UDPDatagramHandler</code> class. This class is then passed
  * the request for service and will service the client in a separate thread.
  * <p>
  * NOTE that this class does not check the incoming UDP datagrams for proper
@@ -49,16 +47,12 @@ public class UDPTrafficManager {
     private int udpHandlerPort = 2409;
 
     /**
-     * Open the UDP <code>DatagramSocket</code> on a specified port, with the
-     * host name of the local machine.
+     * Open the UDP <code>DatagramSocket</code> on a specified port.
      */
     private void openUDPSocket() {
         try {
-            InetAddress hostAddr = InetAddress.getLocalHost();
-//            socket = new DatagramSocket(localPort, hostAddr);
-            socket = new DatagramSocket(localPort);
-            System.out.println("TrafficManager port opened on: " + socket.getLocalSocketAddress());
-        } catch (NumberFormatException | UnknownHostException | SocketException ex) {
+            socket = new DatagramSocket(localPort);  
+        } catch (NumberFormatException | SocketException ex) {
             System.err.println("Fatal error in UPDTrafficManager.");
             ex.printStackTrace();
             System.exit(-1);
@@ -79,7 +73,6 @@ public class UDPTrafficManager {
             rmiHost = RMIHost;
             rmiPort = Integer.parseInt(RMIPort);
             rmiJournayManagerName = RMIJouenryManName;
-            System.out.println("RMI propperties set.");
         } catch (NumberFormatException ex) {
             System.err.println("Fatal error in UPDTrafficManager.");
             ex.printStackTrace();
@@ -100,9 +93,10 @@ public class UDPTrafficManager {
      */
     private void distributeDatagram(DatagramPacket packet) {
         /*
-         Do not offer port numbers greater than 2,409 + 2,000. With a restiction
-         of a maximum users of 1,000, we can expect to be able to reuse port 
-         numbers after an extra 1,000 port numbers.
+         Do not offer port numbers greater than 2,409 + 2,000. With an arbitrary
+         restiction of no more than 1,000 vehicle computers per TrafficManager, 
+         we can expect to be able to reuse port numbers after an extra 1,000 
+         port numbers.
          */
         if (udpHandlerPort >= 4409) {
             udpHandlerPort = 2409;
@@ -113,8 +107,8 @@ public class UDPTrafficManager {
          and increment UDP socket port counter.
          */
         try {
-            UDPPacketHandler handler = 
-                   new UDPPacketHandler(packet, udpHandlerPort, rmiHost,
+            UDPDatagramHandler handler = 
+                   new UDPDatagramHandler(packet, udpHandlerPort, rmiHost,
                                            rmiPort, rmiJournayManagerName);
             handler.start();
             ++udpHandlerPort;
@@ -128,7 +122,7 @@ public class UDPTrafficManager {
 
     /**
      * Main method for starting <code>UDPTrafficManger</code>,
-     * <code>UDPPacketHandler</code>, and <code>JourneyManager</code>.
+     * <code>UDPDatagramHandler</code>, and <code>JourneyManager</code>.
      * <p>
      * @param args
      * <ul>
@@ -146,13 +140,14 @@ public class UDPTrafficManager {
 
         DatagramPacket packet;
         while (true) {
-            // Wait for new DatagramPacket and distribute it to a new handler.
+            /*Wait for new DatagramPacket and distribute it to a new handler.*/
             try {
                 System.out.println("TM: Waiting for packet. . . ");
                 packet = new DatagramPacket(new byte[BUFFER_IN_SIZE],
                                             BUFFER_IN_SIZE);
                 manager.socket.receive(packet);
-                System.out.println("TM: Packet received from " + packet.getSocketAddress());
+                System.out.println("TM: Packet received from " 
+                        + packet.getSocketAddress());
                 manager.distributeDatagram(packet);
             } catch (IOException ex) {
                 System.err.println("-- UDPTrafficManager --");

@@ -10,15 +10,15 @@ import java.util.Objects;
  * <p>
  * @author Andreas Stensig Jensen on Oct 30, 2014
  * Contributors:
- * N/A
  */
 public class Ticket implements Serializable {
 
-    private int number;
-    private String timestamp;
-    // Timestamp format: YYYY-MM-DD hh:mm:ss in 24h mode.
+    /*Timestamp format: YYYY-MM-DD hh:mm:ss in 24h mode.*/
     private static final String TIME_FORMAT = "201[4-9]\\-[0-1][0-9]\\-[0-3]"
             + "[0-9]\\s[0-2][0-9]:[0-5][0-9]:[0-5][0-9]";
+    
+    private int number;
+    private String timestamp;
     private int price;
     private int startZone;
     private int customerNumber;
@@ -26,16 +26,16 @@ public class Ticket implements Serializable {
 
     /**
      * Empty default constructor. After creating the object the data must be
-     * supplied through the creatheTicket method.
+     * supplied through the <code>createTicket</code> method.
      */
     public Ticket() {
-        // Empty default constructor. 
+        /*Empty default constructor.*/
     }
 
     /**
-     * Method for instantiating the data encapsulated in a ticket object.
+     * Method for instantiating the data encapsulated in a <code>Ticket</code>.
      * <p>
-     * @param ticketNumber   must be greater than or equal to 0.
+     * @param ticketNumber   must be greater than 0.
      * @param timestamp      must follow the format: YYYY-MM-DD hh:mm:ss in 24h
      *                       mode.
      * @param price          must be greater than 0.
@@ -72,7 +72,7 @@ public class Ticket implements Serializable {
      * @throws IllegalArgumentException if the number is negative.
      */
     private void setNumber(int number) throws IllegalArgumentException {
-        if (number < 0) {
+        if (number < 1) {
             throw new IllegalArgumentException("Ticket number must be positive.");
         } else {
             this.number = number;
@@ -196,12 +196,12 @@ public class Ticket implements Serializable {
 
     /**
      * Equals override.
-     * Two Ticket objects are equal if and only if all of their private
-     * variables are equal.
+     * Two <code>Ticket</code> objects are equal if and only if all of their 
+     * field variables are equal.
      * <p>
-     * @param obj other Ticket object for testing for equality.
+     * @param obj other <code>Ticket</code> object for testing for equality.
      * <p>
-     * @return true if the two Ticket objects are the same; false otherwise.
+     * @return true if the two objects are equal; false otherwise.
      */
     @Override
     public boolean equals(Object obj) {

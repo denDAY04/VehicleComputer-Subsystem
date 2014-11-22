@@ -1,25 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package FrontEnd;
 
 import javax.swing.JOptionPane;
 
 
-
 /**
- *
- * @author Stensig
+ * Front page <code>JPanel</code> for the customer PDA application GUI.
+ * <p>
+ * @author Andreas Stensig Jensen on Nov 5th, 2014
+ * Contributors:
  */
 public class GUIFrontpage extends javax.swing.JPanel {
 
     private final GraphicalUserInterface parent;
-    
+
     /**
      * Creates new form GUIAppFrontpage
-     * @param parent the parent container for the <code>JLabel</code>.
+     * <p>
+     * @param parent the parent container for this element.
      */
     public GUIFrontpage(GraphicalUserInterface parent) {
         initComponents();
@@ -27,14 +24,15 @@ public class GUIFrontpage extends javax.swing.JPanel {
     }
 
     /**
-     * Show the lable on the front page informing the user that the application
-     * has recieved and responded to a ping. 
-     * @param show true if the lable should be shown, false otherwise. 
+     * Show the label on the front page informing the user that the application
+     * has received and responded to a ping.
+     * <p>
+     * @param show true if the label should be shown, false otherwise.
      */
     public void showPingLable(boolean show) {
         labPDASeen.setVisible(show);
     }
-    
+
     /**
      * This method is called from within the constructor to
      * initialize the form.
@@ -119,22 +117,39 @@ public class GUIFrontpage extends javax.swing.JPanel {
         labPDASeen.setVisible(false);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Switch to the ticket panel for viewing the currently active ticket.
+     * <p>
+     * @param evt not used.
+     */
     private void btnShowTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowTicketActionPerformed
         parent.switchPanel("Ticket");
     }//GEN-LAST:event_btnShowTicketActionPerformed
 
+    /**
+     * Simulate switching to the browser of the PDA in order to redirect to the
+     * site containing the route planner module.
+     * <p>
+     * @param evt not used.
+     */
     private void btnRoutePlannerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRoutePlannerActionPerformed
         String message = "Redirecting to browser. . .";
         String title = "Route Planner redirect";
         JOptionPane.showMessageDialog(this, message, title,
                                       JOptionPane.INFORMATION_MESSAGE);
-        // Go to website
+        /* In a propper implementation, switch to browser application */
     }//GEN-LAST:event_btnRoutePlannerActionPerformed
 
+    /**
+     * Let the user end the journey by closing the application, thus making it
+     * unable to answer to any further pings from a vehicle. 
+     * @param evt not used.
+     */
     private void btnEndJourneyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEndJourneyActionPerformed
         String title = "Exit application";
         String msg = "Are you sure you want to \nend your journey?";
-        int end = JOptionPane.showConfirmDialog(parent, msg, title, JOptionPane.YES_NO_OPTION);
+        int end = JOptionPane.showConfirmDialog(parent, msg, title,
+                                                JOptionPane.YES_NO_OPTION);
         if (end == JOptionPane.YES_OPTION) {
             System.out.println("Client closing app. . . ");
             System.exit(1);

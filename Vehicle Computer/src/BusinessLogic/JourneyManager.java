@@ -8,20 +8,21 @@ import java.util.ArrayList;
 
 
 /**
- * Manager class for ongoing journeys in the sens that it maintains RMI 
+ * Manager class for ongoing journeys in the sens that it maintains RMI
  * connectivity to the database backend, thus being able to both get existing
- * tickets and request new ones to be created in the database. 
+ * tickets and request new ones to be created in the database.
  * <p>
- * In essence, a handler class for both <code>PassengerList</code> and 
- * <code>TicketList</code>, with the operations it perform on these. 
+ * In essence, a handler class for both <code>PassengerList</code> and
+ * <code>TicketList</code>, with the operations it perform on these.
  * <p>
- * @author Andreas Stensig Jensen on Oct 24, 2014
+ * @author Andreas Stensig Jensen on Oct 30, 2014
  * Contributors:
  */
 public class JourneyManager {
 
+    /** Stub for the JourneyManager RMI class on the DataBase backend */
     private final JourneyManagerRMISkel rmiJourneyMan;
-    
+
 
     /**
      * Constructor that initializes the object's RMI connection and
@@ -42,7 +43,7 @@ public class JourneyManager {
     }
 
     /**
-     * Test constructor, bypassing the need for an RMI registry to be 
+     * Test constructor, bypassing the need for an RMI registry to be
      * present by supplying the implementation class directly
      * <p>
      * @param rmiImpl the implementation class of the RMI skeleton, which would
@@ -53,14 +54,15 @@ public class JourneyManager {
     }
 
     /**
-     * Creates a TicketList of Ticket objects for all passengers in the
-     * argument.
+     * Creates a <code>TicketList</code> of <code>Ticket</code> objects for all
+     * passengers in the argument.
      * <p>
      * @param passengers list of the passengers for which to return tickets.
      * <p>
-     * @return a TicketList object with all of the tickets for the passengers.
+     * @return a <code>TicketList</code> object with all of the tickets for the
+     *         passengers.
      */
-    public TicketList generateTickets(PassengerList passengers) {                
+    public TicketList generateTickets(PassengerList passengers) {
         TicketList reply = null;
         if (passengers == null) {
             return reply;
@@ -73,18 +75,20 @@ public class JourneyManager {
         reply = checkTickets(passengers);
         PassengerList newPassengers = getNewPassengers(passengers, reply);
 
-        // Get missing tickets from server and merge with existing tickets
+        /*Get missing tickets from server and merge with existing tickets*/
         try {
-            TicketList newTickets = rmiJourneyMan.createNewTickets(newPassengers);
+            TicketList newTickets = rmiJourneyMan.
+                    createNewTickets(newPassengers);
             reply.mergeWith(newTickets);
         } catch (RemoteException ex) {
-            System.err.println("JM error: Could not generate new tickets.");
+            System.err.println(
+                    "JM: Could not generate new tickets. Returning NULL.");
             ex.printStackTrace();
         }
-        
+
         return reply;
     }
-    
+
     /**
      * Get a list of tickets that are already active for the supplied list of
      * passengers.
@@ -98,15 +102,16 @@ public class JourneyManager {
         try {
             return rmiJourneyMan.getExistingTickets(passengers);
         } catch (RemoteException ex) {
+            System.err.println(
+                    "JM: Error in getting existing tickets. Returning NULL.");
             ex.printStackTrace();
             return null;
         }
     }
 
     /**
-     * Returns a list of the passengers (PassengerList object) from the 1st
-     * argument who does not have a ticket in the list of tickets given in the
-     * 2nd argument.
+     * Returns a list of the passengers from the 1st argument who does not have 
+     * a ticket in the list of tickets given as the 2nd argument.
      * <p>
      * @param passengers the list of passengers on-board the vehicle.
      * @param tickets    the list of currently active tickets.
@@ -118,12 +123,12 @@ public class JourneyManager {
         PassengerList newPassengers = passengers;
         ArrayList<Integer> passengersArr = passengers.getAllPassengers();
 
+        /*
+         If there is a match between a ticket's customer number and a 
+         passenger in the list, remove said passenger from the new list. 
+        */
         for (Ticket t : tickets.getAllTickets()) {
             int customer = t.getCustomerNumber();
-            /*
-             If there is a match between a ticket's customer number and a 
-             passenger in the list, remove said passenger from the new list. 
-             */
             if (passengersArr.contains(customer)) {
                 newPassengers.removeSinglePassenger(customer);
             }

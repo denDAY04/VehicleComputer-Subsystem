@@ -11,28 +11,34 @@ import java.util.Objects;
  * <p>
  * @author Andreas Stensig Jensen on Oct 30, 2014
  * Contributors:
- * N/A
+ * Jonas Grum-Schwensen
  */
 public class PassengerList implements Serializable {
 
-    /** Passengers onboard a vehicle, represented through their customer number. */
+    /**The arbitrary maximum number of passengers on-board a single vehicle.*/
+    private final int MAX_SIZE = 800;
+
+    /**Passengers on-board the vehicle.*/
     private ArrayList<Integer> passengers;
-    /** The zone that the passengers of the list are in */
+
+    /**The zone that the passengers of the list are in.*/
     private int zone;
 
 
     /**
      * Constructor.
-     * @param zone the zone number of the zone the passengers are in. 
+     * <p>
+     * @param zone the zone number of the zone the passengers are in.
      */
     public PassengerList(int zone) {
-        passengers = new ArrayList<>();
+        passengers = new ArrayList<>(MAX_SIZE);
         this.zone = zone;
     }
-    
+
     /**
      * Copy constructor.
-     * @param other passengerlist to copy from.
+     * <p>
+     * @param other <code>PassengerList</code> to copy from.
      */
     public PassengerList(PassengerList other) {
         passengers = other.passengers;
@@ -66,15 +72,17 @@ public class PassengerList implements Serializable {
     }
 
     /**
-     * Get the zone number of the passenger list. 
+     * Get the zone number of the passenger list.
+     * <p>
      * @return the zone number
      */
     public int getZone() {
         return zone;
     }
-    
+
     /**
      * Set the zone number.
+     * <p>
      * @param zone the new zone number.
      */
     public void setZone(int zone) {
@@ -120,19 +128,17 @@ public class PassengerList implements Serializable {
      * @param customerNumber customer number of the passenger to be removed.
      */
     public void removeSinglePassenger(Integer customerNumber) {
-        if (passengers.contains(customerNumber)) {
-            passengers.remove(customerNumber);
-        }
+        passengers.remove(customerNumber);
     }
 
     /**
-     * Get all duplicate passengers between two PassengerLists, as a new
-     * PassengerList.
+     * Get all duplicate passengers between two <code>PassengerLists</code>, as 
+     * a new <code>PassengerList</code>.
      * <p>
-     * @param other other PassengerList.
+     * @param  other list of passengers to compare with. 
      * <p>
-     * @return a new PassengerList containing all duplicates between the two
-     *         Lists.
+     * @return a new <code>PassengerList</code> containing all duplicates 
+     *         between the two lists.
      * <p>
      * @throws IllegalArgumentException if the supplied argument was NULL.
      */
@@ -153,7 +159,6 @@ public class PassengerList implements Serializable {
         return duplicates;
     }
 
-
     /**
      * Auto generated hasCode override.
      * <p>
@@ -167,14 +172,13 @@ public class PassengerList implements Serializable {
     }
 
     /**
-     * Modified equals method. Two PassengerList are only equal if they contain
-     * the same strings. Neither of the lists must contain unique elements. The
-     * sequence in which the strings are placed is ignored.
+     * Modified equals method. Two lists are equal only if they contain
+     * the same elements. Neither of the lists may contain unique elements. The
+     * sequence in which the elements are placed is ignored.
      * <p>
-     * @param obj other PassengerList to test for equality
+     * @param obj other <code>PassengerList</code> to test for equality.
      * <p>
-     * @return true if an only if the two PassengerList are equal; false
-     *         otherwise.
+     * @return true if an only if the two lists are equal; false otherwise.
      */
     @Override
     public boolean equals(Object obj) {
@@ -194,7 +198,7 @@ public class PassengerList implements Serializable {
             return false;
         }
 
-        // Ensure that there are no unique strings in one of the lists. 
+        /*Ensure that there are no unique elements in one of the lists.*/
         ArrayList<Integer> otherPass = other.getAllPassengers();
         for (Integer thisPass : passengers) {
             if (otherPass.contains(thisPass) == false) {

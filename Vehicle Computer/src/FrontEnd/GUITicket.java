@@ -3,18 +3,20 @@ package FrontEnd;
 import BusinessLogic.Ticket;
 
 
-
 /**
- *
- * @author AndreasStensig 14/11/2014
+ * Ticket page <code>JPanel</code> for the customer PDA application GUI.
+ * <p>
+ * @author Andreas Stensig Jensen on Nov 5th, 2014
+ * Contributors:
  */
 public class GUITicket extends javax.swing.JPanel {
 
     private final GraphicalUserInterface parent;
-    
+
     /**
      * Creates new form GUITicket
-     * @param parent the parent container for the <code>JLabel</code>.
+     * <p>
+     * @param parent the parent container for this element.
      */
     public GUITicket(GraphicalUserInterface parent) {
         initComponents();
@@ -22,16 +24,16 @@ public class GUITicket extends javax.swing.JPanel {
     }
 
     /**
-     * Load the data from a <code>Ticket</code> object into the gui panel
-     * displaying the ticket. 
-     * @param ticket the ticket with the information. 
+     * Load the data from a <code>Ticket</code> into the GUI panel,
+     * displaying the ticket.
+     * <p>
+     * @param ticket the <code>Ticket</code> with the information.
      */
     public void loadTicketData(Ticket ticket) {
-        // Load ticket from PDAAplication
         String cusNum = "" + ticket.getCustomerNumber();
         String time = ticket.getTimestamp();
-        String price = "" +  (ticket.getPrice() / 100); // øre to dkk
-        String startZone = "" +  ticket.getStartZone();
+        String price = "" + (ticket.getPrice() / 100.0);  // øre to dkk
+        String startZone = "" + ticket.getStartZone();
         String tickNum = "" + ticket.getNumber();
         fieldCusNum.setText(cusNum);
         fieldTime.setText(time);
@@ -39,7 +41,7 @@ public class GUITicket extends javax.swing.JPanel {
         fieldStartZone.setText(startZone);
         fieldTickNum.setText(tickNum);
     }
-    
+
     /**
      * This method is called from within the constructor to
      * initialize the form.
@@ -146,6 +148,10 @@ public class GUITicket extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Switch back to the front page of the GUI. 
+     * @param evt not used.
+     */
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         parent.switchPanel("Front");
     }//GEN-LAST:event_btnBackActionPerformed
