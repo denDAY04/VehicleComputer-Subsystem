@@ -1,8 +1,5 @@
 package BusinessLogic;
 
-import BusinessLogic.Ticket;
-import BusinessLogic.PassengerList;
-import BusinessLogic.TicketList;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -34,9 +31,10 @@ public class ListsByteSizeTest {
             String time = "2014-10-31 10:06:24";
             int price = 2400;
             int startZone = 4;
+            int validZones = 2;
             int custommerNumber = i;
             Ticket ticket = new Ticket();
-            ticket.createTicket(number, time, price, startZone,
+            ticket.createTicket(number, time, price, startZone, validZones,
                                 custommerNumber);
             tickets.add(ticket);
         }

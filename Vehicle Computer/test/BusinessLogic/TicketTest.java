@@ -5,7 +5,6 @@
  */
 package BusinessLogic;
 
-import BusinessLogic.Ticket;
 import org.junit.*;
 import static org.junit.Assert.*;
 
@@ -29,10 +28,12 @@ public class TicketTest {
         String time = "2014-10-31 10:06:24";
         int price = 1500;
         int startZone = 4;
+        int validZones = 2;
         int custommerNumber = 1;
 
         instance = new Ticket();
-        instance.createTicket(number, time, price, startZone, custommerNumber);
+        instance.createTicket(number, time, price, startZone, validZones,
+                                                              custommerNumber);
     }
 
     /**
@@ -54,9 +55,11 @@ public class TicketTest {
         String time = "2014-10-31 10:06:24";
         int price = 1500;
         int startZone = 4;
+        int validZones = 2;
         int custommerNumber = 1;
         Ticket expResutl = new Ticket();
-        expResutl.createTicket(number, time, price, startZone, custommerNumber);
+        expResutl.createTicket(number, time, price, startZone, validZones,
+                                                               custommerNumber);
         assertEquals(expResutl, instance);
     }
 
@@ -166,9 +169,11 @@ public class TicketTest {
         String time = "2014-10-31 10:06:24";
         int price = 1500;
         int startZone = 4;
+        int validZones = 2;
         int custommerNumber = 1;
         Ticket other = new Ticket();
-        other.createTicket(number, time, price, startZone, custommerNumber);
+        other.createTicket(number, time, price, startZone, validZones,
+                                                           custommerNumber);
 
         Object obj = other;
         boolean expResult = true;

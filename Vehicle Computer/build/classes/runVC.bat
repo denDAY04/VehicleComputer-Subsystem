@@ -1,1 +1,0 @@
-java VehicleServer.VehicleComputer 1 2226 2001:878:200:4102:216:3eff:fe1a:d //thelizard6.eitlab.ihk-edu.dk   

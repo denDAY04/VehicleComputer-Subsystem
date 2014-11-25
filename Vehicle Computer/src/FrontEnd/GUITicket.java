@@ -35,11 +35,13 @@ public class GUITicket extends javax.swing.JPanel {
         String price = "" + (ticket.getPrice() / 100.0);  // øre to dkk
         String startZone = "" + ticket.getStartZone();
         String tickNum = "" + ticket.getNumber();
+        String zoneCount = "" + ticket.getZoneCount();
         fieldCusNum.setText(cusNum);
         fieldTime.setText(time);
         fieldPrice.setText(price);
         fieldStartZone.setText(startZone);
         fieldTickNum.setText(tickNum);
+        fieldZoneCount.setText(zoneCount);
     }
 
     /**
@@ -63,6 +65,9 @@ public class GUITicket extends javax.swing.JPanel {
         fieldStartZone = new javax.swing.JTextField();
         labTickNum = new javax.swing.JLabel();
         fieldTickNum = new javax.swing.JTextField();
+        labValidFor = new javax.swing.JLabel();
+        fieldZoneCount = new javax.swing.JTextField();
+        labZones = new javax.swing.JLabel();
 
         setMinimumSize(new java.awt.Dimension(250, 400));
 
@@ -96,6 +101,13 @@ public class GUITicket extends javax.swing.JPanel {
 
         fieldTickNum.setFocusable(false);
 
+        labValidFor.setText("Valid for ");
+
+        fieldZoneCount.setText(" ");
+        fieldZoneCount.setFocusable(false);
+
+        labZones.setText("zones");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -110,19 +122,28 @@ public class GUITicket extends javax.swing.JPanel {
                     .addComponent(fieldTickNum)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(labCusNum)
                             .addComponent(labTime)
                             .addComponent(labPrice)
                             .addComponent(labStartZone)
                             .addComponent(labTickNum))
-                        .addGap(0, 127, Short.MAX_VALUE)))
+                        .addGap(0, 140, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(fieldZoneCount, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(labZones))
+                            .addComponent(labValidFor))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(34, 34, 34)
+                .addGap(22, 22, 22)
                 .addComponent(labCusNum)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(fieldCusNum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -142,9 +163,16 @@ public class GUITicket extends javax.swing.JPanel {
                 .addComponent(labTickNum)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(fieldTickNum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
-                .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(labValidFor)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(fieldZoneCount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labZones)))
+                    .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(77, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -164,10 +192,13 @@ public class GUITicket extends javax.swing.JPanel {
     private javax.swing.JTextField fieldStartZone;
     private javax.swing.JTextField fieldTickNum;
     private javax.swing.JTextField fieldTime;
+    private javax.swing.JTextField fieldZoneCount;
     private javax.swing.JLabel labCusNum;
     private javax.swing.JLabel labPrice;
     private javax.swing.JLabel labStartZone;
     private javax.swing.JLabel labTickNum;
     private javax.swing.JLabel labTime;
+    private javax.swing.JLabel labValidFor;
+    private javax.swing.JLabel labZones;
     // End of variables declaration//GEN-END:variables
 }

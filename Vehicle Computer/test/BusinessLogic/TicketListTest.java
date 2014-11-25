@@ -5,8 +5,6 @@
  */
 package BusinessLogic;
 
-import BusinessLogic.Ticket;
-import BusinessLogic.TicketList;
 import java.util.ArrayList;
 import org.junit.After; 
 import org.junit.AfterClass;
@@ -44,10 +42,12 @@ public class TicketListTest {
         String time = "2014-10-31 10:06:24";
         int price = 1500;
         int startZone = 4;
+        int validZones = 2;
         int custommerNumber = 1;
 
         Ticket ticket = new Ticket();
-        ticket.createTicket(number, time, price, startZone, custommerNumber);
+        ticket.createTicket(number, time, price, startZone, validZones,
+                                                            custommerNumber);
         instance = new TicketList();
         instance.addSingleTicket(ticket);
     }
@@ -72,17 +72,20 @@ public class TicketListTest {
         String time = "2014-10-31 10:06:24";
         int price = 1500;
         int startZone = 4;
+        int validZones = 2;
         int custommerNumber = 1;
         Ticket ticket = new Ticket();
-        ticket.createTicket(number, time, price, startZone, custommerNumber);
+        ticket.createTicket(number, time, price, startZone, validZones,
+                                                            custommerNumber);
 
         int number2 = 11;
         String time2 = "2015-10-31 10:06:24";
         int price2 = 1501;
         int startZone2 = 5;
+        int validZones2 = 2;
         int custommerNumber2 = 2;
         Ticket ticket2 = new Ticket();
-        ticket2.createTicket(number2, time2, price2, startZone2,
+        ticket2.createTicket(number2, time2, price2, startZone2, validZones2,
                              custommerNumber2);
 
         ArrayList<Ticket> tickets = new ArrayList<>();
@@ -104,9 +107,10 @@ public class TicketListTest {
         String time2 = "2015-10-31 10:06:24";
         int price2 = 1501;
         int startZone2 = 5;
+        int validZones2 = 2;
         int custommerNumber2 = 2;
         Ticket ticket2 = new Ticket();
-        ticket2.createTicket(number2, time2, price2, startZone2,
+        ticket2.createTicket(number2, time2, price2, startZone2, validZones2,
                              custommerNumber2);
 
         instance.addSingleTicket(ticket2);
@@ -125,9 +129,11 @@ public class TicketListTest {
         String time = "2014-10-31 10:06:24";
         int price = 1500;
         int startZone = 4;
+        int validZones = 2;
         int custommerNumber = 1;
         Ticket expResult = new Ticket();
-        expResult.createTicket(number, time, price, startZone, custommerNumber);
+        expResult.createTicket(number, time, price, startZone, validZones,
+                                                               custommerNumber);
 
         Ticket result = instance.getTicket(custommerNumber);
         assertEquals(expResult, result);
@@ -144,9 +150,11 @@ public class TicketListTest {
         String time = "2014-10-31 10:06:24";
         int price = 1500;
         int startZone = 4;
+        int validZones = 2;
         int custommerNumber = 1;
         Ticket ticket = new Ticket();
-        ticket.createTicket(number, time, price, startZone, custommerNumber);
+        ticket.createTicket(number, time, price, startZone, validZones,
+                                                            custommerNumber);
 
         ArrayList<Ticket> expResult = new ArrayList<>();
         expResult.add(ticket);
@@ -182,10 +190,12 @@ public class TicketListTest {
         String time = "2014-10-31 10:06:24";
         int price = 1500;
         int startZone = 4;
+        int validZones = 2;
         int custommerNumber = 1;
 
         Ticket ticket = new Ticket();
-        ticket.createTicket(number, time, price, startZone, custommerNumber);
+        ticket.createTicket(number, time, price, startZone, validZones,
+                                                            custommerNumber);
         TicketList other = new TicketList();
         other.addSingleTicket(ticket);
 
@@ -230,9 +240,11 @@ public class TicketListTest {
         String time = "2014-11-31 10:06:24";
         int price = 150;
         int startZone = 2;
+        int validZones = 2;
         int custommerNumber = 3;
         Ticket ticket = new Ticket();
-        ticket.createTicket(number, time, price, startZone, custommerNumber);
+        ticket.createTicket(number, time, price, startZone, validZones,
+                                                            custommerNumber);
         TicketList other = new TicketList();
         other.addSingleTicket(ticket);
         
@@ -242,9 +254,11 @@ public class TicketListTest {
         time = "2014-10-31 10:06:24";
         price = 1500;
         startZone = 4;
+        validZones = 2;
         custommerNumber = 1;
         Ticket ticket2 = new Ticket();
-        ticket2.createTicket(number, time, price, startZone, custommerNumber);
+        ticket2.createTicket(number, time, price, startZone, validZones, 
+                                                             custommerNumber);
         TicketList expResultList = new TicketList();
         expResultList.addSingleTicket(ticket);
         expResultList.addSingleTicket(ticket2);

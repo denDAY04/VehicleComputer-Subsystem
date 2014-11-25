@@ -25,16 +25,17 @@ public class JourneyManagerRMITestImpl extends UnicastRemoteObject implements Jo
         String[] times = {"2014-10-31 00:00:01", "2014-10-31 00:00:02"};
         int[] prices = {1400, 1000};
         int[] startZones = {1, 2};
+        int[] validZones = {2, 2};
         int[] customerNumbers = {3, 4};
 
         Ticket ticket1 = new Ticket();
         Ticket ticket2 = new Ticket();
         ticket1.createTicket(numbers[0], times[0], prices[0], startZones[0],
-                             customerNumbers[0]);
+                             validZones[0],customerNumbers[0]);
         ticket2.createTicket(numbers[1], times[1], prices[1], startZones[1],
-                             customerNumbers[1]);
+                             validZones[1], customerNumbers[1]);
         Ticket ticket3 = new Ticket();
-        ticket3.createTicket(6, "2014-11-16 00:00:03",1200, 1,1337);
+        ticket3.createTicket(6, "2014-11-16 00:00:03",1200, 1, 2, 1337);
         
         tickets = new TicketList();
         tickets.addSingleTicket(ticket1);
@@ -75,10 +76,11 @@ public class JourneyManagerRMITestImpl extends UnicastRemoteObject implements Jo
         String time = "2014-10-31 10:10:10";
         int price = 2200;
         int startZone = 5;
+        int zoneCount = 2;
         int custommerNumber = 6;
 
         Ticket ticket = new Ticket();
-        ticket.createTicket(number, time, price, startZone,
+        ticket.createTicket(number, time, price, startZone, zoneCount,
                             custommerNumber);
         TicketList ticketList = new TicketList();
         ticketList.addSingleTicket(ticket);

@@ -21,6 +21,7 @@ public class Ticket implements Serializable {
     private String timestamp;
     private int price;
     private int startZone;
+    private int zoneCount;
     private int customerNumber;
 
 
@@ -40,19 +41,21 @@ public class Ticket implements Serializable {
      *                       mode.
      * @param price          must be greater than 0.
      * @param startZone      must be within range: 1-5
+     * @param zoneCount      must be at least 2 and less than 10.
      * @param customerNumber must be greater than 0.
      * <p>
      * @throws IllegalArgumentException if any of the restrictions above are not
      *                                  met.
      */
     public void createTicket(int ticketNumber, String timestamp, int price,
-                             int startZone, int customerNumber) throws
+                             int startZone, int zoneCount, int customerNumber) throws
             IllegalArgumentException {
         this.setNumber(ticketNumber);
         this.setTimestamp(timestamp);
         this.setPrice(price);
         this.setStartZone(startZone);
         this.setCustomerNumber(customerNumber);
+        this.setZoneCount(zoneCount);
     }
 
     /**
@@ -150,6 +153,30 @@ public class Ticket implements Serializable {
         }
         this.startZone = startZone;
     }
+    
+    /**
+     * Get the number of zones the ticket is valid for. 
+     * <p>
+     * @return number of valid zones.
+     */
+    public int getZoneCount() {
+        return zoneCount;
+    }
+    
+    /**
+     * Set the number of zones the ticket is valid for. 
+     * <p>
+     * @param zoneCount the number of zones.
+     * @throws IllegalArgumentException if the value is less than 2 or greater
+     *                                  than 9.
+     */
+    public void setZoneCount(int zoneCount) throws IllegalArgumentException {
+        if (zoneCount < 2 || zoneCount > 10) {
+            throw new IllegalArgumentException("Must be between 2 and "
+                    + "9 inclusive. ");
+        }
+        this.zoneCount = zoneCount;
+    }
 
     /**
      * Get ticket's customer number.
@@ -190,6 +217,7 @@ public class Ticket implements Serializable {
         hash = 53 * hash + Objects.hashCode(this.timestamp);
         hash = 53 * hash + this.price;
         hash = 53 * hash + this.startZone;
+        hash = 53 * hash + this.zoneCount;
         hash = 53 * hash + this.customerNumber;
         return hash;
     }
@@ -222,6 +250,9 @@ public class Ticket implements Serializable {
             return false;
         }
         if (this.startZone != other.startZone) {
+            return false;
+        }
+        if (this.zoneCount != other.zoneCount) {
             return false;
         }
         if (this.customerNumber != other.customerNumber) {

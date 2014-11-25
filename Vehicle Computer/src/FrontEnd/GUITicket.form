@@ -21,7 +21,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="fieldTime" max="32767" attributes="0"/>
@@ -31,14 +31,26 @@
                   <Component id="fieldTickNum" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="btnBack" min="-2" pref="99" max="-2" attributes="0"/>
                           <Component id="labCusNum" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="labTime" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="labPrice" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="labStartZone" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="labTickNum" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="127" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="140" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="fieldZoneCount" min="-2" pref="44" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="labZones" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="labValidFor" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="btnBack" min="-2" pref="80" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -48,7 +60,7 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
               <Component id="labCusNum" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="fieldCusNum" min="-2" max="-2" attributes="0"/>
@@ -68,9 +80,19 @@
               <Component id="labTickNum" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="fieldTickNum" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="54" max="32767" attributes="0"/>
-              <Component id="btnBack" min="-2" pref="53" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Component id="labValidFor" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="fieldZoneCount" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="labZones" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Component id="btnBack" min="-2" pref="41" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="77" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -137,6 +159,22 @@
     <Component class="javax.swing.JTextField" name="fieldTickNum">
       <Properties>
         <Property name="focusable" type="boolean" value="false"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labValidFor">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Valid for "/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="fieldZoneCount">
+      <Properties>
+        <Property name="text" type="java.lang.String" value=" "/>
+        <Property name="focusable" type="boolean" value="false"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labZones">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="zones"/>
       </Properties>
     </Component>
   </SubComponents>
