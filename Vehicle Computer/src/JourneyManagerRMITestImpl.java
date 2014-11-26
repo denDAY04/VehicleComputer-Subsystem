@@ -1,6 +1,6 @@
 
 
-import BusinessLogic.JourneyManagerRMISkel;
+import Database.JourneyManagerRMISkel;
 import BusinessLogic.PassengerList;
 import BusinessLogic.Ticket;
 import BusinessLogic.TicketList;

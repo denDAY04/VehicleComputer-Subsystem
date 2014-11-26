@@ -60,8 +60,9 @@ public class GraphicalUserInterface extends javax.swing.JPanel {
             if (error) {
                 String title = "Ticket Error";
                 String msg = "No ticket was found."
-                        + "\nPlease try again in 10 seconds "
-                        + "\nand if the problem persists"
+                        + "\nPlease try again 10 seconds"
+                        + "\nafter leaving the station."
+                        + "\nIf the problem persists"
                         + "\nsee www.1415.dk";
                 JOptionPane.showMessageDialog(parent, msg, title,
                                               JOptionPane.INFORMATION_MESSAGE);
