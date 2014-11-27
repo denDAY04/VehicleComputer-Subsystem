@@ -70,8 +70,8 @@ public class UDPUplinkHandler {
      *                               translated to an address.
      * @throws SocketException       if the local socket could not be opened.
      */
-    public UDPUplinkHandler(VehicleComputer parent, String localPort, int targetedPort,
-                            String targetedHost)
+    public UDPUplinkHandler(VehicleComputer parent, String localPort, 
+            int targetedPort, String targetedHost)
             throws NumberFormatException, UnknownHostException,
                    SocketException {
         this.parent = parent;
