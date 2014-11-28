@@ -1,12 +1,12 @@
 
 
-import Database.JourneyManagerRMISkel;
+import RMIInterfaces.JourneyManagerRMISkel;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import BusinessLogic.PassengerList;
+import ModelClasses.PassengerList;
 import BusinessLogic.UDPTrafficManager;
 
 /**
@@ -73,17 +73,18 @@ public class IntegrationTest extends Thread {
      * @throws IOException If an I/O exception occurs. 
      */
     public static void main(String[] args) throws  IOException {        
-        socket = new DatagramSocket();
+//        socket = new DatagramSocket();
 
         // Create RMI registry 
         int port = 5708;
         JourneyManagerRMITestImpl rmiImpl = new JourneyManagerRMITestImpl();
         String name = "jmImpl";
-        openRMIRegistry(port, rmiImpl, name);        
+        openRMIRegistry(port, rmiImpl, name); 
+        System.out.println("RMI registry opened.");
         
         // Run UDPTrafficManager in seperate thread through this <code>Class</code>
-        IntegrationTest test = new IntegrationTest();
-        test.start();
+//        IntegrationTest test = new IntegrationTest();
+//        test.start();
     }
 
 }

@@ -2,10 +2,10 @@ package BusinessLogic;
 
 
 
-import Database.JourneyManagerRMISkel;
-import BusinessLogic.PassengerList;
-import BusinessLogic.Ticket;
-import BusinessLogic.TicketList;
+import RMIInterfaces.JourneyManagerRMISkel;
+import ModelClasses.PassengerList;
+import ModelClasses.Ticket;
+import ModelClasses.TicketList;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 

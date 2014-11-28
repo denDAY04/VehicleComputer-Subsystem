@@ -1,6 +1,6 @@
 package VehicleServer;
 
-import BusinessLogic.Ticket;
+import ModelClasses.Ticket;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -97,6 +97,7 @@ public class UDPDownlinkHandler extends Thread {
      * @return the ticket if such is found, or NULL otherwise.
      */
     private Ticket findTicket(int customerNumber) {
+        System.out.println("Request for Ticket received.");
         return parent.getTickets().getTicket(customerNumber);
     }
 

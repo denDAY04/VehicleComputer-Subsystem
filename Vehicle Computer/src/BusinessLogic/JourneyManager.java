@@ -1,6 +1,9 @@
 package BusinessLogic;
 
-import Database.JourneyManagerRMISkel;
+import ModelClasses.PassengerList;
+import ModelClasses.Ticket;
+import ModelClasses.TicketList;
+import RMIInterfaces.JourneyManagerRMISkel;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;

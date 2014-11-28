@@ -1,6 +1,7 @@
 package BusinessLogic;
 
-import Database.JourneyManagerRMISkel;
+import ModelClasses.PassengerList;
+import RMIInterfaces.JourneyManagerRMISkel;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.rmi.RemoteException;

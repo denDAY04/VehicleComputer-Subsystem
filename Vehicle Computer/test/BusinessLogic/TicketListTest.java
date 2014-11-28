@@ -5,6 +5,8 @@
  */
 package BusinessLogic;
 
+import ModelClasses.Ticket;
+import ModelClasses.TicketList;
 import java.util.ArrayList;
 import org.junit.After; 
 import org.junit.AfterClass;

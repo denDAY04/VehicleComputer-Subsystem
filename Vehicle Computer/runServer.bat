@@ -1,1 +1,1 @@
-java BusinessLogic.UDPTrafficManager {RMI_hostname} {RMI_port} {RMI_impl-class_look-up_name}
+java BusinessLogic.UDPTrafficManager goonhilly6.eitlab.ihk-edu.dk 5708 jmImpl

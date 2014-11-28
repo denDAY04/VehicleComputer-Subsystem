@@ -5,6 +5,7 @@
  */
 package BusinessLogic;
 
+import ModelClasses.Ticket;
 import org.junit.*;
 import static org.junit.Assert.*;
 

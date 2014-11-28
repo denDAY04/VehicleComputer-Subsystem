@@ -1,5 +1,7 @@
 package BusinessLogic;
 
+import ModelClasses.PassengerList;
+import ModelClasses.TicketList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.ByteArrayInputStream;

@@ -1,5 +1,7 @@
 package BusinessLogic;
 
+import ModelClasses.PassengerList;
+import ModelClasses.TicketList;
 import java.rmi.RemoteException;
 
 

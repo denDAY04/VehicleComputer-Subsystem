@@ -1,6 +1,6 @@
 package FrontEnd;
 
-import BusinessLogic.Ticket;
+import ModelClasses.Ticket;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;

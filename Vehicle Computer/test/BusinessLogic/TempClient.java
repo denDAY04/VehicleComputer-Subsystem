@@ -1,8 +1,8 @@
 package BusinessLogic;
 
-import BusinessLogic.Ticket;
-import BusinessLogic.PassengerList;
-import BusinessLogic.TicketList;
+import ModelClasses.Ticket;
+import ModelClasses.PassengerList;
+import ModelClasses.TicketList;
 import BusinessLogic.UDPTrafficManager;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

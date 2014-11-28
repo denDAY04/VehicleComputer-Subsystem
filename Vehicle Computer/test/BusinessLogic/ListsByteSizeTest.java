@@ -1,5 +1,8 @@
 package BusinessLogic;
 
+import ModelClasses.Ticket;
+import ModelClasses.PassengerList;
+import ModelClasses.TicketList;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;

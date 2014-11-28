@@ -1,6 +1,6 @@
 package FrontEnd;
 
-import BusinessLogic.Ticket;
+import ModelClasses.Ticket;
 import java.awt.CardLayout;
 import java.io.IOException;
 import javax.swing.JOptionPane;
