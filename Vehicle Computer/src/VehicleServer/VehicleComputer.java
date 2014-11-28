@@ -160,11 +160,22 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals {
      */
     @Override
     public void zoneTransit(int zoneEntered) {
-        System.out.println("VC: Zone transit");
+        System.out.println("VC: Zone transit into " + zoneEntered);
         currentZone = zoneEntered;
-        pingedPassengers.setZone(currentZone);
-        /*Update for possible new tickets*/
-        requestTickets();
+        
+        /*
+         If pings have been performed, change zone of active list and 
+         request new tickets. Else set zone of pinged list and initate pinging,
+         which terminates in getting tickets. 
+        */
+        if (activePassengers != null) {
+            activePassengers.setZone(currentZone);
+            requestTickets();
+        } else {
+            System.out.println("VC: missing pings. . . pinging.");
+            pingedPassengers.setZone(currentZone);
+            leftStation();
+        }
     }
 
     /**

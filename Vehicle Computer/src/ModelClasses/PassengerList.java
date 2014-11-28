@@ -41,6 +41,7 @@ public class PassengerList implements Serializable {
      * @param other <code>PassengerList</code> to copy from.
      */
     public PassengerList(PassengerList other) {
+        this.zone = other.getZone();
         passengers = other.passengers;
     }
 
