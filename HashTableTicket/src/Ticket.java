@@ -223,8 +223,15 @@ public class Ticket implements Serializable {
         return hash;
     }
     
-    public int customerHash() {
-        return 31 * customerNumber;
+    /**
+     * Custom hash method for identifying a Ticket object only through the 
+     * <code>customerNumber</code> field of the Ticket. 
+     * <p>
+     * @return the generated custom hash code.
+     */
+    public int customerHashCode() {
+        int hash = 7;
+        return 53 * hash + this.customerNumber;
     }
 
     /**
