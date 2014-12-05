@@ -29,6 +29,11 @@ class PingHandler extends Thread {
      * current value is 1 minute for testing purposes.
      */
     private final int PINGTIMER_TIMEOUT = (1000 * 60 * 1);
+    /**
+     * Time that the device should not answer to pings when the user has 
+     * manually disable it. Is in milliseconds. 
+     */
+    private final int STATUSTIMER_REACTIVATE = (1000 * 60 * 1);
 
     private final int multicastPort = 2224;
     private final int singlecastReplyPort = 2223;
@@ -39,6 +44,8 @@ class PingHandler extends Thread {
                                                                128);
     private final PDAApplication parent;
     private final Timer pingTimer;
+    private Timer statusTimer;
+    private boolean answerPings = true;
 
 
     /**
@@ -77,6 +84,10 @@ class PingHandler extends Thread {
                 String payload = getData(packetIn);
 
                 switch (payload) {
+                    case "inactive": 
+                        System.out.println("Handler is inactive.");
+                        break;
+                    
                     case "ping":
                         /*Set host reply address in parent*/
                         parent.VCHostAddr = packetIn.getAddress();
@@ -119,6 +130,27 @@ class PingHandler extends Thread {
     }
 
     /**
+     * Set the status of the ping handler, whether it should reply to pings 
+     * or not. If set to false, the handler will not reply to pings for the time
+     * specified in the <code>STATUSTIMER_REACTIVATE</code> field. 
+     * <p>
+     * @param status of the handler for answering pings. 
+     */
+    public void shouldPong(boolean status) {
+        answerPings = status;
+        if (!status) {
+            System.out.println("Ping handler deactivated.");
+            statusTimer = new Timer(STATUSTIMER_REACTIVATE,
+                    new StatusTimerListener());
+            statusTimer.start();
+        } else {
+            System.out.println("Ping handler activated.");
+            statusTimer.stop();
+            parent.gui.showEnabledJourneying();
+        }
+    }
+    
+    /**
      * Get the data from the <code>DatagramPacket</code> ping.
      * <p>
      * @return the data from the packet as a String. 
@@ -126,6 +158,10 @@ class PingHandler extends Thread {
      * @throws IOException if the <code>InputStream</code>
      */
     private String getData(DatagramPacket packet) throws IOException {
+        if (!answerPings) {
+            return "inactive";
+        }
+        
         byte[] dataBytes = packet.getData();
         ByteArrayInputStream bis = new ByteArrayInputStream(dataBytes);
         ObjectInputStream ois = new ObjectInputStream(bis);
@@ -173,6 +209,23 @@ class PingHandler extends Thread {
         public void actionPerformed(ActionEvent e) {
             parent.gui.enablePingLabel(false);
             pingTimer.stop();
+        }
+
+    }
+    
+    /**
+     * <code>Timer ActionListener</code> that is triggered when a given time has
+     * passed after the user has ended a journey, as specified in the 
+     * <code>STATUSTIMER_REACTIVATE</code> field. 
+     * <p>
+     * This event will trigger the status of the handler to be active again.
+     */
+    class StatusTimerListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            System.out.println("Deactivation period passed. Enabling handler.");
+            shouldPong(true);
         }
 
     }

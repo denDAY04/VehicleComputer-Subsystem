@@ -187,6 +187,15 @@ public class PDAApplication extends JFrame {
         }
         return ticket;
     }
+    
+    /**
+     * Set the status of the ping handler. 
+     * <p>
+     * @param shouldAnswer status of the handler. 
+     */
+    public void answerPings(boolean shouldAnswer) {
+        pingHandler.shouldPong(shouldAnswer);
+    }
 
 
     /**

@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 public class GUIFrontpage extends javax.swing.JPanel {
 
     private final GraphicalUserInterface parent;
+    private boolean journeyStatus = true;
 
     /**
      * Creates new form GUIAppFrontpage
@@ -32,6 +33,14 @@ public class GUIFrontpage extends javax.swing.JPanel {
     public void showPingLable(boolean show) {
         labPDASeen.setVisible(show);
     }
+    
+    /**
+     * Show in the GUI that journeying is once again enabled. 
+     */
+    public void displayEnableJourneying() {
+        journeyStatus = true;
+        btnJourneyStatus.setText("End Journey");
+    }
 
     /**
      * This method is called from within the constructor to
@@ -46,7 +55,7 @@ public class GUIFrontpage extends javax.swing.JPanel {
         btnShowTicket = new javax.swing.JButton();
         btnRoutePlanner = new javax.swing.JButton();
         labPDASeen = new javax.swing.JLabel();
-        btnEndJourney = new javax.swing.JButton();
+        btnJourneyStatus = new javax.swing.JButton();
 
         setMinimumSize(new java.awt.Dimension(250, 400));
         setPreferredSize(new java.awt.Dimension(250, 400));
@@ -74,10 +83,10 @@ public class GUIFrontpage extends javax.swing.JPanel {
         labPDASeen.setText("Your device has been registered.");
         labPDASeen.setFocusable(false);
 
-        btnEndJourney.setText("End Journey");
-        btnEndJourney.addActionListener(new java.awt.event.ActionListener() {
+        btnJourneyStatus.setText("End Journey");
+        btnJourneyStatus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEndJourneyActionPerformed(evt);
+                btnJourneyStatusActionPerformed(evt);
             }
         });
 
@@ -97,14 +106,14 @@ public class GUIFrontpage extends javax.swing.JPanel {
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnEndJourney)
+                .addComponent(btnJourneyStatus)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnEndJourney, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnJourneyStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(57, 57, 57)
                 .addComponent(btnShowTicket, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
@@ -141,24 +150,36 @@ public class GUIFrontpage extends javax.swing.JPanel {
     }//GEN-LAST:event_btnRoutePlannerActionPerformed
 
     /**
-     * Let the user end the journey by closing the application, thus making it
-     * unable to answer to any further pings from a vehicle. 
+     * Let the user end the journey disabling the ping handler. The handler will
+     * then be inactive for a fixed time before reactivating automatically. 
+     * <p>
+     * The user may also use this button again, when the handler is inactive, to
+     * reactivate it and enable journeying again.
+     * <p>
      * @param evt not used.
      */
-    private void btnEndJourneyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEndJourneyActionPerformed
-        String title = "Exit application";
-        String msg = "Are you sure you want to \nend your journey?";
-        int end = JOptionPane.showConfirmDialog(parent, msg, title,
+    private void btnJourneyStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJourneyStatusActionPerformed
+        String title = "Confirmation";
+        String msg = "Are you sure?";
+        int answer = JOptionPane.showConfirmDialog(parent, msg, title,
                                                 JOptionPane.YES_NO_OPTION);
-        if (end == JOptionPane.YES_OPTION) {
-            System.out.println("Client closing app. . . ");
-            System.exit(1);
+        if (answer == JOptionPane.YES_OPTION) {
+            if (journeyStatus) {
+                journeyStatus = false;
+                parent.enableJourney(journeyStatus);
+                showPingLable(false);
+                btnJourneyStatus.setText("Begin Journey");
+            } else {
+                journeyStatus = true;
+                parent.enableJourney(journeyStatus);
+                btnJourneyStatus.setText("End Journey");
+            }
         }
-    }//GEN-LAST:event_btnEndJourneyActionPerformed
+    }//GEN-LAST:event_btnJourneyStatusActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnEndJourney;
+    private javax.swing.JButton btnJourneyStatus;
     private javax.swing.JButton btnRoutePlanner;
     private javax.swing.JButton btnShowTicket;
     private javax.swing.JLabel labPDASeen;

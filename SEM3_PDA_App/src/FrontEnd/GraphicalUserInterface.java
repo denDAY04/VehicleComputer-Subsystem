@@ -81,6 +81,22 @@ public class GraphicalUserInterface extends javax.swing.JPanel {
     public void enablePingLabel(boolean enable) {
         frontPagePanel.showPingLable(enable);
     }
+    
+    /**
+     * Set the status of journeying, as indicated by the user. 
+     * <p>
+     * @param status of whether the PDA can be journeying or not. 
+     */
+    public void enableJourney(boolean status) {
+        parent.answerPings(status);
+    }
+    
+    /**
+     * Show enabled journeying in the GUI.
+     */
+    public void showEnabledJourneying() {
+        frontPagePanel.displayEnableJourneying();
+    }
 
     /**
      * This method is called from within the constructor to
