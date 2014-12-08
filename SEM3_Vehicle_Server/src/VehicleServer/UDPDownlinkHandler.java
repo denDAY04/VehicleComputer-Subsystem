@@ -98,7 +98,6 @@ public class UDPDownlinkHandler extends Thread {
      * @return the ticket if such is found, or NULL otherwise.
      */
     private Ticket findTicket(int customerNumber) {
-        System.out.println("Request for Ticket received.");
         return parent.getTickets().getTicket(customerNumber);
     }
 

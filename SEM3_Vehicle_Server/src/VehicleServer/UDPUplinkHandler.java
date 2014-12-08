@@ -95,7 +95,7 @@ public class UDPUplinkHandler {
      * <p>
      * @throws IOException if an I/O error occurred in the Streams.
      */
-    public TicketList getTicketList(PassengerList passengers) throws IOException {
+    public TicketList getTicketList(PassengerList passengers) throws IOException {        
         /*Serialize passenger list and send the request to TrafficManager*/
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bos);
@@ -133,7 +133,7 @@ public class UDPUplinkHandler {
         sendDatagram();
         currSeqNum = 1;
         timer.stop();
-
+        
         return tickets;
     }
 

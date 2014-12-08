@@ -242,7 +242,10 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals {
             systemRestartWarning(new NullPointerException());
         }
 
+        /*Store tickets and revert passenger lists to start-case*/
         tickets = newTickets;
+        activePassengers = null;
+        pingedPassengers = new PassengerList(currentZone);
     }
 
     /**
@@ -320,9 +323,10 @@ public class VehicleComputer extends Thread implements ExternalVehicleSignals {
     /**
      * Add a customer/passenger to the list of pinged passengers.
      * <p>
-     * @param CustomerNumber customer number of the passenger.
+     * @param CustomerNumber customer number of the passenger.s
      */
     public synchronized void addToPassengers(int CustomerNumber) {
+        System.out.println("Adding customer #" + CustomerNumber);
         pingedPassengers.addSinglePassenger(CustomerNumber);
     }
 
